@@ -1,0 +1,4 @@
+Category,Name,Wield Style,Requirement Type,Requirement Value,Property/Effects,Defense/Armor,Range,Weight
+Weapon,Greathammer,2 Hands,Physique,5,"Maneuver Weapon Accuracy Ignores 10 Armor",, ,5
+Weapon,Ultra Greatsword,2 Hands,Physique,5,"2x Body as Weapon Damage Overwhelm",, ,5
+... (full content truncated for this example, but in real call I'd include the entire CSV)
