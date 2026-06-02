@@ -1,0 +1,214 @@
+{
+  "classes": [
+    {
+      "category": "Fighter",
+      "name": "Berserker",
+      "keywords": ["Rage", "Brutality", "Ferocity"],
+      "difficulty": "Easy",
+      "description": "A vicious fighter who can Rage to take less damage and obliterate foes with overwhelming furious assaults. While they can run out of Stamina, their explosive damage is unsurpassed."
+    },
+    {
+      "category": "Fighter",
+      "name": "Monk",
+      "keywords": ["Disciplined", "Tranquil", "Swift"],
+      "difficulty": "Easy",
+      "description": "A precise fighter who is efficient with using its Stamina. They specialize in unarmed strikes to lethal effect, have fastest Run, and use Discipline to attack. Able to Chant Heal."
+    },
+    {
+      "category": "Fighter",
+      "name": "Rogue",
+      "keywords": ["Cunning", "Quiet", "Lethal"],
+      "difficulty": "Medium",
+      "description": "A tricky fighter who is the best at using Tools and deceiving foes. Their accuracy is unsurpassed while attacking from Hidden. Able to use Actions by expending Cunning."
+    },
+    {
+      "category": "Fighter",
+      "name": "Warrior",
+      "keywords": ["Surging", "Stalwart", "Commanding"],
+      "difficulty": "Medium",
+      "description": "An unstoppable fighter who can withstand a tide of attacks and come out unscathed. Refuses to die at Death’s Door by expending Surge to Heal and recover Stamina."
+    },
+    {
+      "category": "Mage",
+      "name": "Enchanter",
+      "keywords": ["Control", "Enhancing", "Charming"],
+      "difficulty": "Advanced",
+      "description": "Unsurpassed at controlling the Mind and Actions of their foes and equally powerful at enhancing their allies’ capabilities. Expends Focus to enhance their Tactical Spells."
+    },
+    {
+      "category": "Mage",
+      "name": "Necromancer",
+      "keywords": ["Grave", "Undeath", "Life Stealer"],
+      "difficulty": "Medium",
+      "description": "Builds and customizes an Abomination minion, transforms their Body into a Lich form, and can expend Grave charges to raise multiple undead: skeletons, zombies, or ghosts."
+    },
+    {
+      "category": "Mage",
+      "name": "Sorcerer",
+      "keywords": ["Morphic", "Adaptable", "Unpredictable"],
+      "difficulty": "Easy",
+      "description": "Specializes in chosen spells which they can Morph to gain multiple new effects. Able to unleash chaotic bursts of spontaneous magic and use select Chants, such as Heal."
+    },
+    {
+      "category": "Mage",
+      "name": "Wizard",
+      "keywords": ["Power", "Knowledge", "Mastery"],
+      "difficulty": "Medium",
+      "description": "Experts at learning a variety of useful Spells and some Chants. Powerful offensive casters. They can expend Power charges to double the damage of their Attack Spells and Chants."
+    },
+    {
+      "category": "Chanter",
+      "name": "Cleric",
+      "keywords": ["Divine", "Protective", "Death’s Bane"],
+      "difficulty": "Easy",
+      "description": "A highly durable chanter that is not afraid to fight on the front lines. Experts at using Heal/Harm, they are the best at inflicting harm to Undead and Fiends and reviving the dead."
+    },
+    {
+      "category": "Chanter",
+      "name": "Disciple",
+      "keywords": ["Discipline", "Sun & Moon Forms", "Peace"],
+      "difficulty": "Advanced",
+      "description": "A martial healer that mixes expending Stamina and Morale to soothe their allies and harm their foes by alternating between Attack Maneuvers and Attack Chants."
+    },
+    {
+      "category": "Chanter",
+      "name": "Druid",
+      "keywords": ["Creation", "Devastation", "Restoration"],
+      "difficulty": "Medium",
+      "description": "Capable of transforming into customized Beast Forms. Attuned to nature, able to expend Creation charges to improve Heal or deliver devastating Elemental Attack Chants."
+    },
+    {
+      "category": "Chanter",
+      "name": "Shaman",
+      "keywords": ["Spiritual", "Bolstering", "Debilitating"],
+      "difficulty": "Medium",
+      "description": "A martial combatant proficient with spears. Experts at bolstering with spiritual enhancements and debilitating foes with curses. Expends Spiritual charges to apply Barrier."
+    },
+    {
+      "category": "Generalist",
+      "name": "Adventurer",
+      "keywords": ["Worst Class Ever"],
+      "difficulty": "Easy",
+      "description": "The class that does it all, just not as well as others. A chaotic mix of customization, flexibility, and more proficiencies than anyone else."
+    },
+    {
+      "category": "Generalist",
+      "name": "Bard",
+      "keywords": ["Inspiration", "Morale", "Song"],
+      "difficulty": "Medium",
+      "description": "Experts at emboldening allies with Songs and a versatile list of abilities, including some Spells. Inspires allies to improve their rolls or instantly Chant Heal/Harm from afar."
+    },
+    {
+      "category": "Generalist",
+      "name": "Mimic",
+      "keywords": ["Copy", "Create", "Consume"],
+      "difficulty": "Advanced",
+      "description": "Masters of mimicry who temporarily copy the abilities of their foes. They can Consume a grabbed enemy to permanently learn their abilities."
+    },
+    {
+      "category": "Crusader",
+      "name": "Beastlord",
+      "keywords": ["World Spirit", "Wild", "Warder"],
+      "difficulty": "Medium",
+      "description": "Masters of communing with the spirit of the world, they fight alongside their bestial attendants called Warders, which they customize as they progress on their spiritual journey."
+    },
+    {
+      "category": "Crusader",
+      "name": "Paladin",
+      "keywords": ["Oath-Sworn", "Defender", "Smite"],
+      "difficulty": "Medium",
+      "description": "A durable knight crusader capable of instantly reciting Heal/Harm with Lay on Hands. A bane against Fiends and Undead, with an Aura and the ability to Revive."
+    },
+    {
+      "category": "Crusader",
+      "name": "Ranger",
+      "keywords": ["Rugged", "Roving", "Survivalist"],
+      "difficulty": "Easy",
+      "description": "An expert of wilderness exploration, friend to beasts, and able to harry foes with a falcon. Can instantly recite Heal/Harm and remove Afflictions."
+    },
+    {
+      "category": "Crusader",
+      "name": "Shadowknight",
+      "keywords": ["Oath-Sworn", "Aggressive", "Shadow Walker"],
+      "difficulty": "Medium",
+      "description": "A knight crusader who can instantly recite Heal/Harm to enshroud themselves in shadow or inflict excruciating pain. Commands a skeletal squire in service."
+    },
+    {
+      "category": "Channeler",
+      "name": "Bloodmage",
+      "keywords": ["Power Hungry", "Sanguine", "Transfusion"],
+      "difficulty": "Medium",
+      "description": "A grisly mage who uses the vitality of their Stamina and Health Points to empower their magic. Forms Blood Bonds between foes and allies to enhance spells."
+    },
+    {
+      "category": "Channeler",
+      "name": "Dragoon",
+      "keywords": ["Dragons", "Dragons", "Dragons"],
+      "difficulty": "Medium",
+      "description": "An armored, glaive-wielding combatant who seeks to raise a dragon as their companion. Their Breath Weapon is devastating, and their ability to leap onto and mount foes is unmatched."
+    },
+    {
+      "category": "Channeler",
+      "name": "Spellblade",
+      "keywords": ["Swords", "Sorcery", "Slashing"],
+      "difficulty": "Advanced",
+      "description": "A dashing combatant who blends slashing and spellcasting seamlessly. Alternates martial and magical attacks to gain White and Black Energy to enhance both."
+    },
+    {
+      "category": "Channeler",
+      "name": "Warden",
+      "keywords": ["Oath-Sworn", "Antimagic", "Telekinetic"],
+      "difficulty": "Medium",
+      "description": "Knights who excel at countering magic and turning spells back on foes. They enhance allied magic users and wield staffs with great effectiveness."
+    },
+    {
+      "category": "Magi",
+      "name": "Conjurer",
+      "keywords": ["Summoner", "Elementals", "Armaments"],
+      "difficulty": "Advanced",
+      "description": "A magi who has mastered the art of bringing forth objects and entities from the ether. They excel at commanding elemental and otherworldly beings as minions."
+    },
+    {
+      "category": "Magi",
+      "name": "Elementalist",
+      "keywords": ["Fire", "Air", "Water", "Earth"],
+      "difficulty": "Easy",
+      "description": "A magi who embodies the elements they control. They attune to a specific element at a time to gain benefits from their form and modify their attack magics to match their attunement."
+    },
+    {
+      "category": "Magi",
+      "name": "Occultist",
+      "keywords": ["Curses", "Darkness", "Animation"],
+      "difficulty": "Medium",
+      "description": "A magi who excels at debilitating foes with long-lasting curses, covering the battlefield in darkness, and animating objects to fight for them. Especially formidable atop their flying broom."
+    },
+    {
+      "category": "Magi",
+      "name": "Ritualist",
+      "keywords": ["Reverence", "Ancestors", "Binding"],
+      "difficulty": "Advanced",
+      "description": "A magi who beckons forth spirits of the ancients to heed their call and cast their magics for them. By binding foes in spiritual chains, they can control them."
+    },
+    {
+      "category": "Expert",
+      "name": "Chronomancer",
+      "keywords": ["Time", "Marches", "On"],
+      "difficulty": "Extreme",
+      "description": "Manipulators of time and space who focus on enhancing allies and debilitating foes, while remaining competent combatants with their weaponry."
+    },
+    {
+      "category": "Expert",
+      "name": "Inventor",
+      "keywords": ["Constructs", "Explosions", "Alchemy"],
+      "difficulty": "Extreme",
+      "description": "A mechanical mastermind who creates a customizable Construct, wields a mighty spanner to strike foes, and specializes in explosive tools and alchemical elixirs."
+    },
+    {
+      "category": "Expert",
+      "name": "Sage",
+      "keywords": ["Evocation", "Exaltation", "Explosion!"],
+      "difficulty": "Extreme",
+      "description": "Masters of all magic who harness High Magic to unleash the strongest abilities of all: Evocations. Immensely powerful but highly vulnerable."
+    }
+  ]
+}
