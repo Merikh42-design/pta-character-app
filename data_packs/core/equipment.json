@@ -1,0 +1,26 @@
+{
+  "weapons": [
+    {"category": "Weapon", "name": "Greathammer", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 5, "properties": "Maneuver Weapon Accuracy Ignores 10 Armor", "weight": 5},
+    {"category": "Weapon", "name": "Ultra Greatsword", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 5, "properties": "2x Body as Weapon Damage Overwhelm", "weight": 5},
+    {"category": "Weapon", "name": "Lance", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 5, "properties": "3x Body as Weapon Damage Leaping Strike", "weight": 5},
+    {"category": "Weapon", "name": "Greatsword", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 4, "properties": "3x Body as Weapon Damage vs Bloodied", "weight": 4},
+    {"category": "Weapon", "name": "Greataxe", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 4, "properties": "Body as Weapon Damage Flurry", "weight": 4},
+    {"category": "Weapon", "name": "Glaive", "wieldStyle": "2 Hands", "requirementType": "Physique", "requirementValue": 4, "properties": "2x Body as Weapon Damage vs Charge", "weight": 4},
+    {"category": "Weapon", "name": "Warhammer", "wieldStyle": "1 Hand / 2 Hand", "requirementType": "Physique", "requirementValue": 3, "properties": "Attack Accuracy Ignores 6 Armor", "weight": 3}
+  ],
+  "shields": [
+    {"category": "Shield", "name": "Gargantuan", "wieldStyle": "2 Hands", "defense": 10, "weight": 8},
+    {"category": "Shield", "name": "Tower", "wieldStyle": "1 Hand", "defense": 8, "weight": 3},
+    {"category": "Shield", "name": "Kite", "wieldStyle": "1 Hand", "defense": 6, "weight": 2}
+  ],
+  "armor": [
+    {"category": "Armor", "name": "Plate", "defense": 10, "properties": "Incoming Lightning Attacks Advantaged; Cannot Wear Vambracers", "weight": 4},
+    {"category": "Armor", "name": "Breastplate", "defense": 8, "properties": "Incoming Lightning Attacks Advantaged", "weight": 3},
+    {"category": "Armor", "name": "Chain", "defense": 6, "properties": "Incoming Lightning Attacks Advantaged", "weight": 2}
+  ],
+  "tools": [
+    {"category": "Tool", "name": "Trap", "properties": "Traps trigger when creatures move onto their space; effect varies; 1-radius", "weight": 3},
+    {"category": "Tool", "name": "Rope", "properties": "50 feet rope; restrain creatures; tie to anchors", "weight": 2},
+    {"category": "Tool", "name": "Grapple Hook", "properties": "Provides climb speed equal to run speed", "weight": 2}
+  ]
+}
