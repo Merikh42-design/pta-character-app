@@ -1,0 +1,53 @@
+{
+  "State": [
+    {"Name": "Berserk", "Effect": "Outgoing Martial/Thrown Projectile Weapon Attacks Advantaged; Incoming Attacks Advantaged; Expending 1 Mana Exits State"},
+    {"Name": "Challenged", "Effect": "Enter Facing State Toward Challenger; Cannot Move Away From Challenger; Must Use Attacks At Challenger; Successfully Hitting the Challenger Exits State"},
+    {"Name": "Controlled", "Effect": "Controlled Creature Must Use Actions Of Controller’s Choice; Resist Roll if attacking allies; Success Exits State"},
+    {"Name": "Dancing", "Effect": "Expend All Run Within Current Space; Incoming Attacks Disadvantaged; Forces Viewing Creatures to Face Dancer; Limit 1 Dance Per Round; Exit After 1 Round"},
+    {"Name": "Dazed", "Effect": "Cannot Cast Spells/Recite Chants/Evoke Evocations; -10 Attack Accuracy; -10 Dodge; Enter at negative Mana, otherwise Exit"},
+    {"Name": "Death’s Door", "Effect": "Use Tools Free Action Only; Run lowered to 3; Death Prevention Roll end of round and on damage; Enter at 0 HP, otherwise Exit"},
+    {"Name": "Demoralized", "Effect": "Take No Actions; Has Frightened Affliction; Enter at negative Morale; Exit if regaining at least 1 Morale"},
+    {"Name": "Disguised", "Effect": "Unrecognizable as Yourself; Search Free Action can Reveal; Exit at Will"},
+    {"Name": "Dodging", "Effect": "Double Defense gained from Dodge Skill; Exit after Duration or At Will"},
+    {"Name": "Exhausted", "Effect": "Movement Halved; No Stamina Recovery; Enter at negative Stamina, otherwise Exit"},
+    {"Name": "Facing", "Effect": "Face Fixed Direction; -5 Dodge from Behind; No Vision Behind"},
+    {"Name": "Hidden", "Effect": "Unseen, Unheard; +5 Dodge on Attacked Foes; -5 Accuracy Incoming Attacks; Using Abilities Exits; Search Free Action can Reveal"},
+    {"Name": "Grappled", "Effect": "Enter Facing State Toward Grappler; Grappler Can Move Grappled Creature; Shaking Off Free Action Exits State"},
+    {"Name": "Invisible", "Effect": "Unseen; +5 Outgoing Accuracy; -5 Incoming Accuracy; Using Abilities or being Searched Exits State"},
+    {"Name": "Levitation", "Effect": "Falls 1 Range per Round; Exited at Will or if inflicted with Snare Affliction"},
+    {"Name": "Mounted", "Effect": "Actively Mounted by another; Can be forced to move via Lead Free Action; Exits if Shake Off Maneuver succeeds"},
+    {"Name": "Mounting", "Effect": "Actively Mounting another; +5 Outgoing Accuracy; -5 Incoming Accuracy from Mounted Creature; Exits if Shake Off Maneuver succeeds"},
+    {"Name": "Oiled", "Effect": "Immune to Grappled; Burning deals Double Fire Damage; Exits via Shake Off Maneuver"},
+    {"Name": "Pinned", "Effect": "Prone; Cannot Execute Attack Maneuvers or Move; Exits on successful Shake Off Maneuver"},
+    {"Name": "Prone", "Effect": "Movement Halved; -5 Dodge; -5 Outgoing Accuracy; Expend 1 Stamina to Stand and Exit"},
+    {"Name": "Retaliation", "Effect": "Cannot Move; Incoming Melee Attacks trigger free Attack Reactions; Exit At Will or if moved"},
+    {"Name": "Sleep", "Effect": "Enter Unconscious/Prone; Damage, Loud Noises, or Being Awoken Exits State"},
+    {"Name": "Unconscious", "Effect": "Cannot Act or Move; Incoming Attacks Always Critically Hit; If not in Sleep State, exits after 1 hour"},
+    {"Name": "Wet", "Effect": "Empowers incoming Lightning Damage; Removes and Prevents Burning Affliction"}
+  ],
+  "Affliction": [
+    {"Name": "Blinded", "Effect": "No Vision; -5 Accuracy; -5 Dodge; Cured by Eagle-Eyed Boon or Triage"},
+    {"Name": "Burning", "Effect": "-5 HP Fire Damage per Round; -5 Accuracy; Cannot Enter Invisibility; Cured by Wet State or Shake Off"},
+    {"Name": "Frightened", "Effect": "-5 Accuracy; Must move away from source; Cured by Bold Boon or Shake Off"},
+    {"Name": "Hemorrhaging", "Effect": "-5 HP per Round; -5 HP per square of Run; Heal 1 HP to Cure; Cured by Triage"},
+    {"Name": "Immobilized", "Effect": "No Movement; -10 Dodge; Fail Avoid Rolls; Cured by Charge or Haste Boons or Shake Off"},
+    {"Name": "Poisoned", "Effect": "-5 Accuracy; -5 Skill Challenge Effectiveness; Cured by Triage"},
+    {"Name": "Silenced", "Effect": "Cannot Use Verbal Abilities; Speechless; Cured by Amplified Boon or Triage"},
+    {"Name": "Slowed", "Effect": "Run Halved; -5 Dodge; Attack Maneuver allows only 1 attack; Spells resolve after 1 Round; Chants after 2; Evocations after 3; Cured by Haste Boon"},
+    {"Name": "Snared", "Effect": "Run Halved; -5 Dodge; Prevents Climb/Swim/Flight/Burrow; Cured by Charge or Haste Boons or Shake Off"},
+    {"Name": "Stop", "Effect": "No Actions, Reactions, or Movement; Incoming Attacks Critically Hit; Cured by Alacrity or Haste Boons"},
+    {"Name": "Vulnerable", "Effect": "Prevention Rolls Disadvantaged"},
+    {"Name": "Weakened", "Effect": "Halves Attack Outcome; Halves Tactical Potency; Cured by Empower Boon"}
+  ],
+  "Boon": [
+    {"Name": "Alacrity", "Effect": "Immediately take an additional Action; Removes Stop Affliction"},
+    {"Name": "Amplified", "Effect": "Doubles Vocal Range; Doubles Song Radius; Immune to Silence"},
+    {"Name": "Bold", "Effect": "Immune to Frightened Affliction; Cures Frightened Affliction"},
+    {"Name": "Bolstered", "Effect": "Prevention Rolls Advantaged"},
+    {"Name": "Charge", "Effect": "Immediately regain full Run; Removes Snared and Immobilized Afflictions"},
+    {"Name": "Eagle-Eyed", "Effect": "Doubles Vision Range; Enables Dark Vision; Prevents Blinded; Removes Blinded"},
+    {"Name": "Empowered", "Effect": "Doubles Attack Outcome; Dispels Weakened Affliction"},
+    {"Name": "Haste", "Effect": "Doubles Run; Additional Attack on Attack Maneuver; +5 Dodge (can exceed cap); Recite Instantly; Evoke in 1 Round; Dispels Stop/Slow"},
+    {"Name": "Swiftness", "Effect": "Doubles Run; Cures Immobilized/Snared; Dispels Immobilized/Snared"}
+  ]
+}
