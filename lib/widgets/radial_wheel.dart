@@ -11,9 +11,26 @@ class RadialWheel extends ConsumerWidget {
 
     return Column(
       children: [
-        CustomPaint(
-          size: const Size(280, 280),
-          painter: _RadialWheelPainter(),
+        SizedBox(
+          width: 280,
+          height: 280,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Painted wheel (segments + parchment)
+              CustomPaint(
+                size: const Size(280, 280),
+                painter: _RadialWheelPainter(),
+              ),
+              // Celtic knot logo in the center
+              Image.asset(
+                'assets/images/paths_knot.png',
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         _buildInfoRow('Class', character.className),
@@ -65,17 +82,6 @@ class _RadialWheelPainter extends CustomPainter {
     // Spirit - Gold #c3b15b
     segmentPaint.color = const Color(0xFFc3b15b);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), 2.61, 2.09, false, segmentPaint);
-
-    // Center label
-    final textPainter = TextPainter(
-      text: const TextSpan(
-        text: 'Body / Mind / Spirit',
-        style: TextStyle(color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w600),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, center - Offset(textPainter.width / 2, textPainter.height / 2));
   }
 
   @override
