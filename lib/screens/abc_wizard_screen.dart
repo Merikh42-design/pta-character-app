@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/data_service.dart';
+import '../providers/character_provider.dart';
 
-/// ABC Creation Wizard - focused on Class selection for immediate testing
-/// Uses real data from class_descriptors.json
-/// Ancestry and Background are prepared as stubs for future data.
-class ABCWizardScreen extends StatefulWidget {
+class ABCWizardScreen extends ConsumerStatefulWidget {
   const ABCWizardScreen({super.key});
 
   @override
-  State<ABCWizardScreen> createState() => _ABCWizardScreenState();
+  ConsumerState<ABCWizardScreen> createState() => _ABCWizardScreenState();
 }
 
-class _ABCWizardScreenState extends State<ABCWizardScreen> {
+class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   List<Map<String, dynamic>> _classDescriptors = [];
   Map<String, dynamic>? _selectedClass;
   bool _isLoading = true;
@@ -30,13 +29,15 @@ class _ABCWizardScreenState extends State<ABCWizardScreen> {
     });
   }
 
-  void _selectClass(Map<String, dynamic> classData) {
+  Future<void> _selectClass(Map<String, dynamic> classData) async {
+    final className = classData['name'] as String;
+
     setState(() {
       _selectedClass = classData;
     });
 
-    // Future: Load matching starting stats from classes.json and show preview
-    // final startingStats = await DataService.getClassByName(classData['name']);
+    // Save to global state
+    await ref.read(characterProvider.notifier).selectClass(className);
   }
 
   @override
@@ -59,7 +60,7 @@ class _ABCWizardScreenState extends State<ABCWizardScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Ancestry and Background coming soon. Class picker is live with your real data.',
+                    'Ancestry and Background coming soon. Class picker is live.',
                     style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 20),
@@ -141,8 +142,8 @@ class _ABCWizardScreenState extends State<ABCWizardScreen> {
                                 ],
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                     ),
                   ),
@@ -166,7 +167,7 @@ class _ABCWizardScreenState extends State<ABCWizardScreen> {
                           ),
                           const SizedBox(height: 4),
                           const Text(
-                            'Starting stats from classes.json + full class features will apply here in the next iteration.',
+                            'Starting stats + Radial Wheel will update on Character Sheet.',
                             style: TextStyle(fontSize: 12),
                           ),
                         ],
