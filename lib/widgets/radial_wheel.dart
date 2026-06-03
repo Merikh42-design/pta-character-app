@@ -22,11 +22,20 @@ class RadialWheel extends ConsumerWidget {
                 size: const Size(280, 280),
                 painter: _RadialWheelPainter(),
               ),
+              // Subtle dark circle behind the knot for better contrast
+              Container(
+                width: 130,
+                height: 130,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF2C2C2C),
+                  shape: BoxShape.circle,
+                ),
+              ),
               // Celtic knot logo in the center
               Image.asset(
                 'assets/images/paths_knot.png',
-                width: 120,
-                height: 120,
+                width: 118,
+                height: 118,
                 fit: BoxFit.contain,
               ),
             ],
