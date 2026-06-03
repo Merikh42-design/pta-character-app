@@ -49,21 +49,21 @@ class _RadialWheelPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Three colored segments
+    // Three colored segments using official colors from Jon
     final segmentPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 38;
 
-    // Body - Green
-    segmentPaint.color = const Color(0xFF4A7C59);
+    // Body - Green #42b278
+    segmentPaint.color = const Color(0xFF42b278);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), -1.57, 2.09, false, segmentPaint);
 
-    // Mind - Blue
-    segmentPaint.color = const Color(0xFF3F5E8C);
+    // Mind - Blue #87cdfe
+    segmentPaint.color = const Color(0xFF87cdfe);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), 0.52, 2.09, false, segmentPaint);
 
-    // Spirit - Gold
-    segmentPaint.color = const Color(0xFFC9A94D);
+    // Spirit - Gold #c3b15b
+    segmentPaint.color = const Color(0xFFc3b15b);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), 2.61, 2.09, false, segmentPaint);
 
     // Center label
