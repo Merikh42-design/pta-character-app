@@ -29,11 +29,45 @@ class DataService {
     return json.decode(jsonString);
   }
 
-  // Easy method to get a class by name (for applying starting stats later)
+  // === NEW: Ancestry & Background Loading ===
+
+  static Future<List<Map<String, dynamic>>> loadAncestries() async {
+    final String jsonString =
+        await rootBundle.loadString('data_packs/core/ancestries.json');
+    return List<Map<String, dynamic>>.from(json.decode(jsonString));
+  }
+
+  static Future<List<Map<String, dynamic>>> loadBackgrounds() async {
+    final String jsonString =
+        await rootBundle.loadString('data_packs/core/backgrounds.json');
+    return List<Map<String, dynamic>>.from(json.decode(jsonString));
+  }
+
+  // Easy method to get a class by name
   static Future<Map<String, dynamic>?> getClassByName(String name) async {
     final classes = await loadClasses();
     try {
       return classes.firstWhere((c) => c['Class'] == name);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Easy method to get an ancestry by name
+  static Future<Map<String, dynamic>?> getAncestryByName(String name) async {
+    final ancestries = await loadAncestries();
+    try {
+      return ancestries.firstWhere((a) => a['name'] == name);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Easy method to get a background by name
+  static Future<Map<String, dynamic>?> getBackgroundByName(String name) async {
+    final backgrounds = await loadBackgrounds();
+    try {
+      return backgrounds.firstWhere((b) => b['Name'] == name);
     } catch (_) {
       return null;
     }
