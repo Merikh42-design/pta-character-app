@@ -1,1 +1,242 @@
-PLACEHOLDER
+[
+  {
+    "Category": "Crafter",
+    "Name": "Smith",
+    "Skills": "Athletics",
+    "Product": "Metal Equipment",
+    "Effect": "",
+    "Identification": "Metal Equipment and Ore Quality"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Tinkerer",
+    "Skills": "Knowledge",
+    "Product": "Tools & Gadgets",
+    "Effect": "",
+    "Identification": "Tools, Gadgets, & Constructs"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Tailor",
+    "Skills": "Precision",
+    "Product": "Cloth Equipment",
+    "Effect": "",
+    "Identification": "Cloths & Fabric Quality"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Leatherworker",
+    "Skills": "Survival",
+    "Product": "Leather Equipment",
+    "Effect": "",
+    "Identification": "Leather & Hide Quality"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Arcanist",
+    "Skills": "Arcana",
+    "Product": "Foci & Relics",
+    "Effect": "",
+    "Identification": "Foci & Relics"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Bowyer",
+    "Skills": "Precision",
+    "Product": "Bows/Crossbows & Arrows/Bolts",
+    "Effect": "",
+    "Identification": "Bows/Crossbows & Arrows/Bolts"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Jeweler",
+    "Skills": "Perception",
+    "Product": "Jewelry",
+    "Effect": "",
+    "Identification": "Gems & Jewelry"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Rancher",
+    "Skills": "Empathy",
+    "Product": "Raise & Train Non-Ancestry Creature",
+    "Effect": "",
+    "Identification": "Quality & Types of Creatures"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Scribe",
+    "Skills": "Research",
+    "Product": "Spells & Chant Scrolls",
+    "Effect": "",
+    "Identification": "Spells & Chant Scrolls"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Munitioner",
+    "Skills": "Precision",
+    "Product": "Guns, Grenades, & Ammo",
+    "Effect": "",
+    "Identification": "Guns, Grenades, & Ammo"
+  },
+  {
+    "Category": "Crafter",
+    "Name": "Apothecary",
+    "Skills": "Medicine",
+    "Product": "Poisons & Potions",
+    "Effect": "",
+    "Identification": "Alchemical Ingredients"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Assassin",
+    "Skills": "Stealth",
+    "Product": "Dead Ancestry Creatures",
+    "Effect": "",
+    "Identification": "Identity of Ancestry Creatures"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Bounty Hunter",
+    "Skills": "Intimidation",
+    "Product": "Captured Ancestry Creatures",
+    "Effect": "",
+    "Identification": "Identity of Ancestry Creatures"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Forager",
+    "Skills": "Survival",
+    "Product": "Wild Ingredients",
+    "Effect": "",
+    "Identification": "Wild Ingredients"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Hunter",
+    "Skills": "Precision",
+    "Product": "Creature Parts",
+    "Effect": "",
+    "Identification": "Creature Parts"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Lumberjack",
+    "Skills": "Athletics",
+    "Product": "Lumber",
+    "Effect": "",
+    "Identification": "Trees & Lumber"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Miner",
+    "Skills": "Athletics",
+    "Product": "Ore & Stone",
+    "Effect": "",
+    "Identification": "Quality of Ore & Stone"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Thief",
+    "Skills": "Larceny",
+    "Product": "Currency & Valuables",
+    "Effect": "",
+    "Identification": "Value of Currency and Valuables"
+  },
+  {
+    "Category": "Harvester",
+    "Name": "Trapper",
+    "Skills": "Survival",
+    "Product": "Non-Ancestry Creatures",
+    "Effect": "",
+    "Identification": "Quality of Non-Ancestry Creature"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Commander",
+    "Skills": "Leadership",
+    "Product": "",
+    "Effect": "Leadership Chants Cost 1 Less Morale",
+    "Identification": "Enemy Tactics"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Conservationist",
+    "Skills": "Survival",
+    "Product": "",
+    "Effect": "Nature’s Companion allows for 2 Beasts",
+    "Identification": "Beast Creatures"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Dancer",
+    "Skills": "Balance",
+    "Product": "",
+    "Effect": "Dance Maneuvers Cost 1 Less Stamina",
+    "Identification": "Dance Moves"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Diplomat",
+    "Skills": "Empathy",
+    "Product": "",
+    "Effect": "Make a Friend Endure Roll is Disadvantaged",
+    "Identification": "Treaties and Politics"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Jester",
+    "Skills": "Dodge",
+    "Product": "",
+    "Effect": "Barrel Roll has No Cost",
+    "Identification": "Good & Bad Jokes"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Magician",
+    "Skills": "Arcana",
+    "Product": "",
+    "Effect": "Counterspell Resist Roll is Disadvantaged",
+    "Identification": "Spells and Spell Casters"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Priest",
+    "Skills": "Piety",
+    "Product": "",
+    "Effect": "Gain Heal/Harm, Revives Recently Dead Creatures",
+    "Identification": "Undead & Fiends"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Royal",
+    "Skills": "Persuasion",
+    "Product": "",
+    "Effect": "Considered Neutral or Friendly to Nobility",
+    "Identification": "Pedigree of Ancestry"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Singer",
+    "Skills": "Perform",
+    "Product": "",
+    "Effect": "Song Chants Last Additional Round",
+    "Identification": "Singing Quality"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Therapist",
+    "Skills": "Empathy",
+    "Product": "",
+    "Effect": "Therapeutic Conversation - No Cost",
+    "Identification": "Emotional States"
+  },
+  {
+    "Category": "Vocations",
+    "Name": "Town Crier",
+    "Skills": "Knowledge",
+    "Product": "",
+    "Effect": "Considered Neutral or Friendly to Commoners",
+    "Identification": "Newsworthy Stories"
+  }
+]
