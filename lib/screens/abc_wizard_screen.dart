@@ -60,6 +60,8 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final hasAllSelections = _selectedClass != null && _selectedAncestry != null && _selectedBackground != null;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Character - ABC Wizard'),
@@ -72,40 +74,34 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // CLASS SECTION
                   const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   _buildClassGrid(),
 
                   const SizedBox(height: 32),
 
-                  // ANCESTRY SECTION
                   const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   _buildAncestryGrid(),
 
                   const SizedBox(height: 32),
 
-                  // BACKGROUND SECTION
                   const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
                   _buildBackgroundGrid(),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
 
-                  if (_selectedClass != null && _selectedAncestry != null && _selectedBackground != null)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.green[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green),
+                  if (hasAllSelections)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/character_sheet');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: Colors.brown[700],
                       ),
-                      child: const Text(
-                        'All selections saved. You can now view your Character Sheet.',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+                      child: const Text('Continue to Character Sheet', style: TextStyle(fontSize: 16)),
                     ),
                 ],
               ),
