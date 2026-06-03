@@ -10,8 +10,6 @@ class CharacterSheetScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final character = ref.watch(characterProvider);
 
-    final stats = character.startingStats ?? {};
-
     return Scaffold(
       appBar: AppBar(
         title: Text(character.className ?? 'Character Sheet'),
@@ -22,37 +20,61 @@ class CharacterSheetScreen extends ConsumerWidget {
         child: Column(
           children: [
             const RadialWheel(),
-            const SizedBox(height: 24),
-            const Text(
-              'Starting Stats',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const SizedBox(height: 20),
+
+            // ABC Summary
+            Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Character Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Divider(),
+                    _infoRow('Class', character.className),
+                    _infoRow('Ancestry', character.ancestry),
+                    _infoRow('Background', character.background),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (stats['Physique'] != null) _statChip('Physique', stats['Physique']),
-                if (stats['Technique'] != null) _statChip('Technique', stats['Technique']),
-                if (stats['Intellect'] != null) _statChip('Intellect', stats['Intellect']),
-                if (stats['Willpower'] != null) _statChip('Willpower', stats['Willpower']),
-                if (stats['Max Stamina'] != null) _statChip('Stamina', stats['Max Stamina']),
-                if (stats['Max Mana'] != null) _statChip('Mana', stats['Max Mana']),
-                if (stats['Max Morale'] != null) _statChip('Morale', stats['Max Morale']),
-                if (stats['Defense'] != null) _statChip('Defense', stats['Defense']),
-                if (stats['Run'] != null) _statChip('Run', stats['Run']),
-              ],
-            ),
+
+            const SizedBox(height: 20),
+
+            // Starting Stats
+            if (character.startingStats != null) ...[
+              const Text('Starting Stats', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _buildStatChips(character.startingStats!),
+              ),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _statChip(String label, dynamic value) {
-    return Chip(
-      label: Text('$label: $value'),
-      visualDensity: VisualDensity.compact,
+  Widget _infoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(width: 100, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+          Text(value ?? 'Not selected'),
+        ],
+      ),
     );
+  }
+
+  List<Widget> _buildStatChips(Map<String, dynamic> stats) {
+    final chips = <Widget>[];
+    stats.forEach((key, value) {
+      chips.add(Chip(label: Text('$key: $value')));
+    });
+    return chips;
   }
 }
