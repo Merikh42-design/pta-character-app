@@ -8,72 +8,69 @@ class RadialWheel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final character = ref.watch(characterProvider);
-    final stats = character.startingStats;
 
-    if (stats == null) {
-      return const Center(
-        child: Text('Select a class in the ABC Wizard to see the Radial Wheel'),
-      );
-    }
+    return Column(
+      children: [
+        CustomPaint(
+          size: const Size(280, 280),
+          painter: _RadialWheelPainter(),
+        ),
+        const SizedBox(height: 16),
+        _buildInfoRow('Class', character.className),
+        _buildInfoRow('Ancestry', character.ancestry),
+        _buildInfoRow('Background', character.background),
+      ],
+    );
+  }
 
-    return CustomPaint(
-      size: const Size(300, 300),
-      painter: _RadialWheelPainter(stats: stats),
+  Widget _buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(value ?? 'Not selected'),
+        ],
+      ),
     );
   }
 }
 
 class _RadialWheelPainter extends CustomPainter {
-  final Map<String, dynamic> stats;
-
-  _RadialWheelPainter({required this.stats});
-
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 10;
 
-    // Background
+    // Parchment background
     final bgPaint = Paint()
-      ..color = const Color(0xFFF5E8C7) // Parchment
+      ..color = const Color(0xFFF5E8C7)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Simple three segments (placeholder for now)
+    // Three colored segments
     final segmentPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 40;
+      ..strokeWidth = 38;
 
     // Body - Green
     segmentPaint.color = const Color(0xFF4A7C59);
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - 20),
-      -1.57, 2.09, false, segmentPaint,
-    );
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), -1.57, 2.09, false, segmentPaint);
 
     // Mind - Blue
     segmentPaint.color = const Color(0xFF3F5E8C);
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - 20),
-      0.52, 2.09, false, segmentPaint,
-    );
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), 0.52, 2.09, false, segmentPaint);
 
     // Spirit - Gold
     segmentPaint.color = const Color(0xFFC9A94D);
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - 20),
-      2.61, 2.09, false, segmentPaint,
-    );
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius - 18), 2.61, 2.09, false, segmentPaint);
 
-    // Center text
+    // Center label
     final textPainter = TextPainter(
-      text: TextSpan(
-        text: stats['Class'] ?? 'Class',
-        style: const TextStyle(
-          color: Colors.black87,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+      text: const TextSpan(
+        text: 'Body / Mind / Spirit',
+        style: TextStyle(color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w600),
       ),
       textDirection: TextDirection.ltr,
     );
