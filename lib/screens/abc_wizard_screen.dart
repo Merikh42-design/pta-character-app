@@ -12,7 +12,13 @@ class ABCWizardScreen extends ConsumerStatefulWidget {
 
 class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   List<Map<String, dynamic>> _classDescriptors = [];
+  List<Map<String, dynamic>> _ancestries = [];
+  List<Map<String, dynamic>> _backgrounds = [];
+
   Map<String, dynamic>? _selectedClass;
+  Map<String, dynamic>? _selectedAncestry;
+  Map<String, dynamic>? _selectedBackground;
+
   bool _isLoading = true;
 
   @override
@@ -23,21 +29,33 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
 
   Future<void> _loadData() async {
     final descriptors = await DataService.loadClassDescriptors();
+    final ancestries = await DataService.loadAncestries();
+    final backgrounds = await DataService.loadBackgrounds();
+
     setState(() {
       _classDescriptors = descriptors;
+      _ancestries = ancestries;
+      _backgrounds = backgrounds;
       _isLoading = false;
     });
   }
 
   Future<void> _selectClass(Map<String, dynamic> classData) async {
     final className = classData['name'] as String;
-
-    setState(() {
-      _selectedClass = classData;
-    });
-
-    // Save to global state
+    setState(() => _selectedClass = classData);
     await ref.read(characterProvider.notifier).selectClass(className);
+  }
+
+  Future<void> _selectAncestry(Map<String, dynamic> ancestryData) async {
+    final name = ancestryData['name'] as String;
+    setState(() => _selectedAncestry = ancestryData);
+    await ref.read(characterProvider.notifier).selectAncestry(name);
+  }
+
+  Future<void> _selectBackground(Map<String, dynamic> backgroundData) async {
+    final name = backgroundData['Name'] as String;
+    setState(() => _selectedBackground = backgroundData);
+    await ref.read(characterProvider.notifier).selectBackground(name);
   }
 
   @override
@@ -49,160 +67,151 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Step 3: Choose Your Class',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Ancestry and Background coming soon. Class picker is live.',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 20),
+                  // CLASS SECTION
+                  const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 12),
+                  _buildClassGrid(),
 
-                  Expanded(
-                    child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1.15,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                      ),
-                      itemCount: _classDescriptors.length,
-                      itemBuilder: (context, index) {
-                        final cls = _classDescriptors[index];
-                        final isSelected = _selectedClass != null &&
-                            _selectedClass!['name'] == cls['name'];
+                  const SizedBox(height: 32),
 
-                        return GestureDetector(
-                          onTap: () => _selectClass(cls),
-                          child: Card(
-                            elevation: isSelected ? 6 : 2,
-                            color: isSelected ? Colors.amber[50] : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: isSelected
-                                  ? const BorderSide(color: Colors.amber, width: 2)
-                                  : BorderSide.none,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                        decoration: BoxDecoration(
-                                          color: Colors.brown[100],
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text(
-                                          cls['category'] ?? '',
-                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      _buildDifficultyChip(cls['difficulty']),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    cls['name'] ?? '',
-                                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                                  ),
-                                  if (cls['keywords'] != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 4, bottom: 6),
-                                      child: Wrap(
-                                        spacing: 4,
-                                        runSpacing: -4,
-                                        children: (cls['keywords'] as List)
-                                            .map((k) => Chip(
-                                                  label: Text(k.toString(), style: const TextStyle(fontSize: 9)),
-                                                  visualDensity: VisualDensity.compact,
-                                                  padding: EdgeInsets.zero,
-                                                ))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  const Spacer(),
-                                  Text(
-                                    cls['description'] ?? '',
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 11, color: Colors.black87),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                  // ANCESTRY SECTION
+                  const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 12),
+                  _buildAncestryGrid(),
 
-                  if (_selectedClass != null) ...[
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 32),
+
+                  // BACKGROUND SECTION
+                  const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 12),
+                  _buildBackgroundGrid(),
+
+                  const SizedBox(height: 24),
+
+                  if (_selectedClass != null && _selectedAncestry != null && _selectedBackground != null)
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.green[50],
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.green.shade300),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Selected: ${_selectedClass!['name']}",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            'Starting stats + Radial Wheel will update on Character Sheet.',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
+                      child: const Text(
+                        'All selections saved. You can now view your Character Sheet.',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ],
                 ],
               ),
             ),
     );
   }
 
-  Widget _buildDifficultyChip(String? difficulty) {
-    Color color;
-    switch (difficulty) {
-      case 'Easy':
-        color = Colors.green;
-        break;
-      case 'Medium':
-        color = Colors.orange;
-        break;
-      case 'Advanced':
-        color = Colors.redAccent;
-        break;
-      case 'Extreme':
-        color = Colors.purple;
-        break;
-      default:
-        color = Colors.grey;
-    }
-    return Chip(
-      label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)),
-      backgroundColor: color,
-      visualDensity: VisualDensity.compact,
-      padding: EdgeInsets.zero,
+  Widget _buildClassGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.1,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _classDescriptors.length,
+      itemBuilder: (context, index) {
+        final cls = _classDescriptors[index];
+        final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
+        return _buildSelectionCard(
+          title: cls['name'] ?? '',
+          subtitle: cls['category'] ?? '',
+          isSelected: isSelected,
+          onTap: () => _selectClass(cls),
+        );
+      },
+    );
+  }
+
+  Widget _buildAncestryGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.1,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _ancestries.length,
+      itemBuilder: (context, index) {
+        final anc = _ancestries[index];
+        final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
+        return _buildSelectionCard(
+          title: anc['name'] ?? '',
+          subtitle: anc['category'] ?? '',
+          isSelected: isSelected,
+          onTap: () => _selectAncestry(anc),
+        );
+      },
+    );
+  }
+
+  Widget _buildBackgroundGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.1,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _backgrounds.length,
+      itemBuilder: (context, index) {
+        final bg = _backgrounds[index];
+        final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
+        return _buildSelectionCard(
+          title: bg['Name'] ?? '',
+          subtitle: bg['Category'] ?? '',
+          isSelected: isSelected,
+          onTap: () => _selectBackground(bg),
+        );
+      },
+    );
+  }
+
+  Widget _buildSelectionCard({
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: isSelected ? 6 : 2,
+        color: isSelected ? Colors.amber[50] : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
