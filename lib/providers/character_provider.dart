@@ -13,6 +13,14 @@ class CharacterNotifier extends Notifier<Character> {
       startingStats: stats,
     );
   }
+
+  Future<void> selectAncestry(String ancestryName) async {
+    state = state.copyWith(ancestry: ancestryName);
+  }
+
+  Future<void> selectBackground(String backgroundName) async {
+    state = state.copyWith(background: backgroundName);
+  }
 }
 
 final characterProvider = NotifierProvider<CharacterNotifier, Character>(
