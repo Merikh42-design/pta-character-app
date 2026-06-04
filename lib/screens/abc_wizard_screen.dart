@@ -19,6 +19,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   Map<String, dynamic>? _selectedAncestry;
   Map<String, dynamic>? _selectedBackground;
 
+  int currentStep = 1; // 1 = Class, 2 = Ancestry, 3 = Background
   bool _isLoading = true;
 
   @override
@@ -37,6 +38,12 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       _ancestries = ancestries;
       _backgrounds = backgrounds;
       _isLoading = false;
+    });
+  }
+
+  void _goToStep(int step) {
+    setState(() {
+      currentStep = step;
     });
   }
 
@@ -60,8 +67,6 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final hasAllSelections = _selectedClass != null && _selectedAncestry != null && _selectedBackground != null;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Character - ABC Wizard'),
@@ -69,52 +74,161 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+          : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 12),
-                  _buildClassGrid(),
+                  // Progress indicator
+                  _buildProgressIndicator(),
+                  const SizedBox(height: 20),
 
-                  const SizedBox(height: 32),
+                  // Current Step Content
+                  Expanded(child: _buildCurrentStep()),
 
-                  const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 12),
-                  _buildAncestryGrid(),
+                  const SizedBox(height: 16),
 
-                  const SizedBox(height: 32),
-
-                  const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 12),
-                  _buildBackgroundGrid(),
-
-                  const SizedBox(height: 32),
-
-                  if (hasAllSelections)
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/character_sheet');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.brown[700],
-                      ),
-                      child: const Text('Continue to Character Sheet', style: TextStyle(fontSize: 16)),
-                    ),
+                  // Navigation Buttons
+                  _buildNavigationButtons(),
                 ],
               ),
             ),
     );
   }
 
-  // ==================== CLASS CARDS (with artwork support) ====================
+  Widget _buildProgressIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildStepCircle(1, 'Class'),
+        _buildStepLine(),
+        _buildStepCircle(2, 'Ancestry'),
+        _buildStepLine(),
+        _buildStepCircle(3, 'Background'),
+      ],
+    );
+  }
+
+  Widget _buildStepCircle(int step, String label) {
+    final isActive = currentStep == step;
+    final isCompleted = currentStep > step;
+
+    return Column(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: isCompleted || isActive ? Colors.brown[700] : Colors.grey[300],
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              step.toString(),
+              style: TextStyle(
+                color: isCompleted || isActive ? Colors.white : Colors.black54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _buildStepLine() {
+    return Container(
+      width: 40,
+      height: 2,
+      color: Colors.brown[300],
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+    );
+  }
+
+  Widget _buildCurrentStep() {
+    switch (currentStep) {
+      case 1:
+        return _buildClassStep();
+      case 2:
+        return _buildAncestryStep();
+      case 3:
+        return _buildBackgroundStep();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildClassStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        Expanded(child: _buildClassGrid()),
+      ],
+    );
+  }
+
+  Widget _buildAncestryStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        Expanded(child: _buildAncestryGrid()),
+      ],
+    );
+  }
+
+  Widget _buildBackgroundStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 12),
+        Expanded(child: _buildBackgroundGrid()),
+      ],
+    );
+  }
+
+  Widget _buildNavigationButtons() {
+    final canGoNext = _canProceedToNextStep();
+
+    if (currentStep == 3) {
+      return ElevatedButton(
+        onPressed: canGoNext
+            ? () => Navigator.pushNamed(context, '/character_sheet')
+            : null,
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 52),
+          backgroundColor: Colors.brown[700],
+        ),
+        child: const Text('Continue to Character Sheet', style: TextStyle(fontSize: 16)),
+      );
+    }
+
+    return ElevatedButton(
+      onPressed: canGoNext ? () => _goToStep(currentStep + 1) : null,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 52),
+        backgroundColor: Colors.brown[700],
+      ),
+      child: const Text('Next', style: TextStyle(fontSize: 16)),
+    );
+  }
+
+  bool _canProceedToNextStep() {
+    if (currentStep == 1) return _selectedClass != null;
+    if (currentStep == 2) return _selectedAncestry != null;
+    if (currentStep == 3) return _selectedBackground != null;
+    return false;
+  }
+
+  // ==================== CLASS CARDS ====================
 
   Widget _buildClassGrid() {
     return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.95,
@@ -148,7 +262,6 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top row: Category + Difficulty
               Row(
                 children: [
                   Container(
@@ -157,25 +270,14 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                       color: Colors.brown[100],
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Text(
-                      cls['category'] ?? '',
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                    ),
+                    child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
                   ),
                   const Spacer(),
                   _buildDifficultyChip(cls['difficulty']),
                 ],
               ),
-
               const SizedBox(height: 8),
-
-              // Class Name
-              Text(
-                className,
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-              ),
-
-              // Keywords
+              Text(className, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
               if (cls['keywords'] != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 4, bottom: 6),
@@ -190,37 +292,20 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                         .toList(),
                   ),
                 ),
-
-              // === CLASS ARTWORK (fills middle empty space) ===
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Image.asset(
                     imagePath,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback: subtle placeholder if no art yet
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.image_outlined, color: Colors.grey, size: 32),
-                        ),
-                      );
-                    },
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(8)),
+                      child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 32)),
+                    ),
                   ),
                 ),
               ),
-
-              // Description
-              Text(
-                cls['description'] ?? '',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 11, color: Colors.black87),
-              ),
+              Text(cls['description'] ?? '', maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11)),
             ],
           ),
         ),
@@ -229,23 +314,12 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   }
 
   Widget _buildDifficultyChip(String? difficulty) {
-    Color color;
-    switch (difficulty) {
-      case 'Easy':
-        color = Colors.green;
-        break;
-      case 'Medium':
-        color = Colors.orange;
-        break;
-      case 'Advanced':
-        color = Colors.redAccent;
-        break;
-      case 'Extreme':
-        color = Colors.purple;
-        break;
-      default:
-        color = Colors.grey;
-    }
+    Color color = Colors.grey;
+    if (difficulty == 'Easy') color = Colors.green;
+    if (difficulty == 'Medium') color = Colors.orange;
+    if (difficulty == 'Advanced') color = Colors.redAccent;
+    if (difficulty == 'Extreme') color = Colors.purple;
+
     return Chip(
       label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)),
       backgroundColor: color,
@@ -254,12 +328,10 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  // ==================== ANCESTRY & BACKGROUND (simpler cards) ====================
+  // ==================== ANCESTRY & BACKGROUND ====================
 
   Widget _buildAncestryGrid() {
     return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1.1,
@@ -270,20 +342,13 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       itemBuilder: (context, index) {
         final anc = _ancestries[index];
         final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
-        return _buildSimpleCard(
-          title: anc['name'] ?? '',
-          subtitle: anc['category'] ?? '',
-          isSelected: isSelected,
-          onTap: () => _selectAncestry(anc),
-        );
+        return _buildSimpleCard(title: anc['name'] ?? '', subtitle: anc['category'] ?? '', isSelected: isSelected, onTap: () => _selectAncestry(anc));
       },
     );
   }
 
   Widget _buildBackgroundGrid() {
     return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 1.1,
@@ -294,12 +359,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       itemBuilder: (context, index) {
         final bg = _backgrounds[index];
         final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
-        return _buildSimpleCard(
-          title: bg['Name'] ?? '',
-          subtitle: bg['Category'] ?? '',
-          isSelected: isSelected,
-          onTap: () => _selectBackground(bg),
-        );
+        return _buildSimpleCard(title: bg['Name'] ?? '', subtitle: bg['Category'] ?? '', isSelected: isSelected, onTap: () => _selectBackground(bg));
       },
     );
   }
@@ -315,10 +375,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       child: Card(
         elevation: isSelected ? 6 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
