@@ -78,16 +78,10 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Progress indicator (now tappable)
                   _buildProgressIndicator(),
                   const SizedBox(height: 20),
-
-                  // Current Step Content
                   Expanded(child: _buildCurrentStep()),
-
                   const SizedBox(height: 16),
-
-                  // Navigation Buttons (Next + Back)
                   _buildNavigationButtons(),
                 ],
               ),
@@ -124,13 +118,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: Text(
-                step.toString(),
-                style: TextStyle(
-                  color: isCompleted || isActive ? Colors.white : Colors.black54,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: Text(step.toString(), style: TextStyle(color: isCompleted || isActive ? Colors.white : Colors.black54, fontWeight: FontWeight.bold)),
             ),
           ),
           const SizedBox(height: 4),
@@ -141,26 +129,19 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   }
 
   Widget _buildStepLine() {
-    return Container(
-      width: 40,
-      height: 2,
-      color: Colors.brown[300],
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-    );
+    return Container(width: 40, height: 2, color: Colors.brown[300], margin: const EdgeInsets.symmetric(horizontal: 4));
   }
 
   Widget _buildCurrentStep() {
     switch (currentStep) {
-      case 1:
-        return _buildClassStep();
-      case 2:
-        return _buildAncestryStep();
-      case 3:
-        return _buildBackgroundStep();
-      default:
-        return const SizedBox.shrink();
+      case 1: return _buildClassStep();
+      case 2: return _buildAncestryStep();
+      case 3: return _buildBackgroundStep();
+      default: return const SizedBox.shrink();
     }
   }
+
+  // ==================== CLASS STEP ====================
 
   Widget _buildClassStep() {
     return Column(
@@ -173,6 +154,8 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
+  // ==================== ANCESTRY STEP (Improved with details) ====================
+
   Widget _buildAncestryStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,6 +166,75 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       ],
     );
   }
+
+  Widget _buildAncestryGrid() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.0,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _ancestries.length,
+      itemBuilder: (context, index) {
+        final anc = _ancestries[index];
+        final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
+        return _buildAncestryCard(ancestry: anc, isSelected: isSelected);
+      },
+    );
+  }
+
+  Widget _buildAncestryCard({required Map<String, dynamic> ancestry, required bool isSelected}) {
+    final name = ancestry['name'] ?? '';
+    final category = ancestry['category'] ?? '';
+    final description = ancestry['description'] ?? '';
+    final bonuses = ancestry['bonuses'] ?? ancestry['traits'] ?? '';
+
+    return GestureDetector(
+      onTap: () => _selectAncestry(ancestry),
+      child: Card(
+        elevation: isSelected ? 6 : 2,
+        color: isSelected ? Colors.amber[50] : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              if (category.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, bottom: 6),
+                  child: Text(category, style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic)),
+                ),
+              if (description.isNotEmpty)
+                Expanded(
+                  child: Text(
+                    description,
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ),
+              if (bonuses.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    'Bonuses: $bonuses',
+                    style: const TextStyle(fontSize: 12, color: Colors.green[700], fontWeight: FontWeight.w500),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== BACKGROUND STEP ====================
 
   Widget _buildBackgroundStep() {
     return Column(
@@ -195,26 +247,39 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
+  Widget _buildBackgroundGrid() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.1,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _backgrounds.length,
+      itemBuilder: (context, index) {
+        final bg = _backgrounds[index];
+        final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
+        return _buildSimpleCard(title: bg['Name'] ?? '', subtitle: bg['Category'] ?? '', isSelected: isSelected, onTap: () => _selectBackground(bg));
+      },
+    );
+  }
+
+  // ==================== NAVIGATION ====================
+
   Widget _buildNavigationButtons() {
     final canGoNext = _canProceedToNextStep();
 
     return Row(
       children: [
-        // Back button
         if (currentStep > 1)
           Expanded(
             child: OutlinedButton(
               onPressed: () => _goToStep(currentStep - 1),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 52),
-              ),
+              style: OutlinedButton.styleFrom(minimumSize: const Size(double.infinity, 52)),
               child: const Text('Back', style: TextStyle(fontSize: 16)),
             ),
           ),
-
         if (currentStep > 1) const SizedBox(width: 12),
-
-        // Next / Continue button
         Expanded(
           child: ElevatedButton(
             onPressed: canGoNext
@@ -230,10 +295,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               minimumSize: const Size(double.infinity, 52),
               backgroundColor: Colors.brown[700],
             ),
-            child: Text(
-              currentStep == 3 ? 'Continue to Character Sheet' : 'Next',
-              style: const TextStyle(fontSize: 16),
-            ),
+            child: Text(currentStep == 3 ? 'Continue to Character Sheet' : 'Next', style: const TextStyle(fontSize: 16)),
           ),
         ),
       ],
@@ -288,10 +350,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.brown[100],
-                      borderRadius: BorderRadius.circular(6),
-                    ),
+                    decoration: BoxDecoration(color: Colors.brown[100], borderRadius: BorderRadius.circular(6)),
                     child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
                   ),
                   const Spacer(),
@@ -305,13 +364,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                   padding: const EdgeInsets.only(top: 4, bottom: 6),
                   child: Wrap(
                     spacing: 4,
-                    children: (cls['keywords'] as List)
-                        .map((k) => Chip(
-                              label: Text(k.toString(), style: const TextStyle(fontSize: 10)),
-                              visualDensity: VisualDensity.compact,
-                              padding: EdgeInsets.zero,
-                            ))
-                        .toList(),
+                    children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 10)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero)).toList(),
                   ),
                 ),
               Expanded(
@@ -341,50 +394,10 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     if (difficulty == 'Medium') color = Colors.orange;
     if (difficulty == 'Advanced') color = Colors.redAccent;
     if (difficulty == 'Extreme') color = Colors.purple;
-
-    return Chip(
-      label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)),
-      backgroundColor: color,
-      visualDensity: VisualDensity.compact,
-      padding: EdgeInsets.zero,
-    );
+    return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero);
   }
 
-  // ==================== ANCESTRY & BACKGROUND ====================
-
-  Widget _buildAncestryGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.1,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _ancestries.length,
-      itemBuilder: (context, index) {
-        final anc = _ancestries[index];
-        final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
-        return _buildSimpleCard(title: anc['name'] ?? '', subtitle: anc['category'] ?? '', isSelected: isSelected, onTap: () => _selectAncestry(anc));
-      },
-    );
-  }
-
-  Widget _buildBackgroundGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.1,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _backgrounds.length,
-      itemBuilder: (context, index) {
-        final bg = _backgrounds[index];
-        final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
-        return _buildSimpleCard(title: bg['Name'] ?? '', subtitle: bg['Category'] ?? '', isSelected: isSelected, onTap: () => _selectBackground(bg));
-      },
-    );
-  }
+  // ==================== SIMPLE CARD (for Background) ====================
 
   Widget _buildSimpleCard({
     required String title,
