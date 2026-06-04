@@ -78,7 +78,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Progress indicator
+                  // Progress indicator (now tappable)
                   _buildProgressIndicator(),
                   const SizedBox(height: 20),
 
@@ -87,7 +87,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
 
                   const SizedBox(height: 16),
 
-                  // Navigation Buttons
+                  // Navigation Buttons (Next + Back)
                   _buildNavigationButtons(),
                 ],
               ),
@@ -112,28 +112,31 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     final isActive = currentStep == step;
     final isCompleted = currentStep > step;
 
-    return Column(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: isCompleted || isActive ? Colors.brown[700] : Colors.grey[300],
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              step.toString(),
-              style: TextStyle(
-                color: isCompleted || isActive ? Colors.white : Colors.black54,
-                fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => _goToStep(step),
+      child: Column(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: isCompleted || isActive ? Colors.brown[700] : Colors.grey[300],
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                step.toString(),
+                style: TextStyle(
+                  color: isCompleted || isActive ? Colors.white : Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+          const SizedBox(height: 4),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
 
@@ -195,26 +198,45 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   Widget _buildNavigationButtons() {
     final canGoNext = _canProceedToNextStep();
 
-    if (currentStep == 3) {
-      return ElevatedButton(
-        onPressed: canGoNext
-            ? () => Navigator.pushNamed(context, '/character_sheet')
-            : null,
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size(double.infinity, 52),
-          backgroundColor: Colors.brown[700],
-        ),
-        child: const Text('Continue to Character Sheet', style: TextStyle(fontSize: 16)),
-      );
-    }
+    return Row(
+      children: [
+        // Back button
+        if (currentStep > 1)
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => _goToStep(currentStep - 1),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 52),
+              ),
+              child: const Text('Back', style: TextStyle(fontSize: 16)),
+            ),
+          ),
 
-    return ElevatedButton(
-      onPressed: canGoNext ? () => _goToStep(currentStep + 1) : null,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 52),
-        backgroundColor: Colors.brown[700],
-      ),
-      child: const Text('Next', style: TextStyle(fontSize: 16)),
+        if (currentStep > 1) const SizedBox(width: 12),
+
+        // Next / Continue button
+        Expanded(
+          child: ElevatedButton(
+            onPressed: canGoNext
+                ? () {
+                    if (currentStep == 3) {
+                      Navigator.pushNamed(context, '/character_sheet');
+                    } else {
+                      _goToStep(currentStep + 1);
+                    }
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 52),
+              backgroundColor: Colors.brown[700],
+            ),
+            child: Text(
+              currentStep == 3 ? 'Continue to Character Sheet' : 'Next',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
