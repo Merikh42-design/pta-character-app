@@ -29,6 +29,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/classes/
     - assets/vectors/
     - data_packs/core/
     - data_packs/preview/
