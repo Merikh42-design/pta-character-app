@@ -14,7 +14,8 @@ class DataService {
   static Future<List<Map<String, dynamic>>> loadClasses() async {
     final String jsonString =
         await rootBundle.loadString('data_packs/core/classes.json');
-    return List<Map<String, dynamic>>.from(json.decode(jsonString));
+    final Map<String, dynamic> jsonMap = json.decode(jsonString);
+    return List<Map<String, dynamic>>.from(jsonMap['classes'] ?? []);
   }
 
   static Future<Map<String, dynamic>> loadStates() async {

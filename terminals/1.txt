@@ -1,0 +1,11 @@
+---
+pid: 38584
+cwd: "C:\Users\Matt\Documents\GitHub\pta-character-app"
+command: "cd \"C:\\Users\\Matt\\Documents\\GitHub\\pta-character-app\" && flutter run -d chrome --web-port=7357"
+started_at: 2026-06-04T05:31:51.893Z
+running_for_ms: 1500000  
+---
+Launching lib\main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...             32.3s
+Failed to launch browser after 3 tries. Command used to launch it: C:\Program Files\Google\Chrome\Application\chrome.exe --user-data-dir=C:\Users\Matt\AppData\Local\Temp\flutter_tools.720cd99a\flutter_tools_chrome_device.15ef4c94 --remote-debugging-port=57644 --disable-background-timer-throttling --disable-extensions --disable-popup-blocking --bwsi --no-first-run --no-default-browser-check --disable-default-apps --disable-translate --disable-search-engine-choice-screen http://localhost:7357
+Failed to launch browser. Make sure you are using an up-to-date Chrome or Edge. Otherwise, consider using -d web-server instead and filing an issue at https://github.com/flutter/flutter/issues.

@@ -1,0 +1,81 @@
+---
+pid: 36516
+cwd: "C:\Users\Matt\Documents\GitHub\pta-character-app"
+command: "cd \"C:\\Users\\Matt\\Documents\\GitHub\\pta-character-app\\build\\web\" && python -m http.server 7357 --bind 127.0.0.1"
+started_at: 2026-06-04T05:39:06.323Z
+running_for_ms: 1070010  
+---
+Serving HTTP on 127.0.0.1 port 7357 (http://127.0.0.1:7357/) ...
+127.0.0.1 - - [04/Jun/2026 00:39:13] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:16] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:16] "GET /flutter_bootstrap.js HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:16] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:16] "GET /icons/Icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:16] "GET /main.dart.js HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:17] "GET /assets/FontManifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:17] "GET /assets/fonts/MaterialIcons-Regular.otf HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:18] "GET /assets/data_packs/core/class_descriptors.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:18] "GET /assets/data_packs/core/ancestries.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:18] "GET /assets/data_packs/core/backgrounds.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:18] "GET /assets/AssetManifest.bin.json HTTP/1.1" 200 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/berserker.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/monk.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/rogue.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/warrior.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/enchanter.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/necromancer.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/sorcerer.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/wizard.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/cleric.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/disciple.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/druid.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/shaman.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/adventurer.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/bard.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/mimic.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/beastlord.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/paladin.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/ranger.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/shadowknight.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/dragoon.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/bloodmage.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/spellblade.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/warden.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/conjurer.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/elementalist.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/occultist.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/ritualist.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/chronomancer.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/inventor.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:21] code 404, message File not found
+127.0.0.1 - - [04/Jun/2026 00:39:21] "GET /assets/assets/images/classes/sage.png HTTP/1.1" 404 -
+127.0.0.1 - - [04/Jun/2026 00:39:37] "GET /assets/data_packs/core/classes.json HTTP/1.1" 200 -

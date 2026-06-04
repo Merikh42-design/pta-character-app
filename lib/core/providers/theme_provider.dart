@@ -10,7 +10,7 @@ final themeProvider = StateProvider<ThemeData>((ref) {
       foregroundColor: Colors.white,
       elevation: 2,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.white,
       elevation: 2,
       shape: RoundedRectangleBorder(
