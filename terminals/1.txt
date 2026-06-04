@@ -3,7 +3,7 @@ pid: 38584
 cwd: "C:\Users\Matt\Documents\GitHub\pta-character-app"
 command: "cd \"C:\\Users\\Matt\\Documents\\GitHub\\pta-character-app\" && flutter run -d chrome --web-port=7357"
 started_at: 2026-06-04T05:31:51.893Z
-running_for_ms: 1500000  
+running_for_ms: 2600002  
 ---
 Launching lib\main.dart on Chrome in debug mode...
 Waiting for connection from debug service on Chrome...             32.3s

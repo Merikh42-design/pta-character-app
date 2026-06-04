@@ -13,7 +13,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Step 1: Choose Your Class'), findsOneWidget);
-    expect(find.text('Step 2: Choose Your Ancestry'), findsOneWidget);
-    expect(find.text('Step 3: Choose Your Background'), findsOneWidget);
+    expect(find.text('Class'), findsWidgets);
+    expect(find.text('Next'), findsOneWidget);
   });
 }

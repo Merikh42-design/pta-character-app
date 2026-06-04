@@ -37,6 +37,11 @@ class RadialWheel extends ConsumerWidget {
                 width: 118,
                 height: 118,
                 fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.hub_outlined,
+                  size: 72,
+                  color: Color(0xFFE8D5B7),
+                ),
               ),
             ],
           ),
