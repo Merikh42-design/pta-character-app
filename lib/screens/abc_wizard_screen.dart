@@ -109,13 +109,15 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
+  // ==================== CLASS CARDS (with artwork support) ====================
+
   Widget _buildClassGrid() {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.1,
+        childAspectRatio: 0.95,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
@@ -123,15 +125,136 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       itemBuilder: (context, index) {
         final cls = _classDescriptors[index];
         final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
-        return _buildSelectionCard(
-          title: cls['name'] ?? '',
-          subtitle: cls['category'] ?? '',
-          isSelected: isSelected,
-          onTap: () => _selectClass(cls),
-        );
+        return _buildClassCard(cls: cls, isSelected: isSelected);
       },
     );
   }
+
+  Widget _buildClassCard({required Map<String, dynamic> cls, required bool isSelected}) {
+    final className = cls['name'] ?? '';
+    final imagePath = 'assets/images/classes/${className.toLowerCase().replaceAll(' ', '_')}.png';
+
+    return GestureDetector(
+      onTap: () => _selectClass(cls),
+      child: Card(
+        elevation: isSelected ? 6 : 2,
+        color: isSelected ? Colors.amber[50] : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top row: Category + Difficulty
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.brown[100],
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      cls['category'] ?? '',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  const Spacer(),
+                  _buildDifficultyChip(cls['difficulty']),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              // Class Name
+              Text(
+                className,
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
+
+              // Keywords
+              if (cls['keywords'] != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4, bottom: 6),
+                  child: Wrap(
+                    spacing: 4,
+                    children: (cls['keywords'] as List)
+                        .map((k) => Chip(
+                              label: Text(k.toString(), style: const TextStyle(fontSize: 10)),
+                              visualDensity: VisualDensity.compact,
+                              padding: EdgeInsets.zero,
+                            ))
+                        .toList(),
+                  ),
+                ),
+
+              // === CLASS ARTWORK (fills middle empty space) ===
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback: subtle placeholder if no art yet
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.image_outlined, color: Colors.grey, size: 32),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              // Description
+              Text(
+                cls['description'] ?? '',
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 11, color: Colors.black87),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDifficultyChip(String? difficulty) {
+    Color color;
+    switch (difficulty) {
+      case 'Easy':
+        color = Colors.green;
+        break;
+      case 'Medium':
+        color = Colors.orange;
+        break;
+      case 'Advanced':
+        color = Colors.redAccent;
+        break;
+      case 'Extreme':
+        color = Colors.purple;
+        break;
+      default:
+        color = Colors.grey;
+    }
+    return Chip(
+      label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)),
+      backgroundColor: color,
+      visualDensity: VisualDensity.compact,
+      padding: EdgeInsets.zero,
+    );
+  }
+
+  // ==================== ANCESTRY & BACKGROUND (simpler cards) ====================
 
   Widget _buildAncestryGrid() {
     return GridView.builder(
@@ -147,7 +270,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       itemBuilder: (context, index) {
         final anc = _ancestries[index];
         final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
-        return _buildSelectionCard(
+        return _buildSimpleCard(
           title: anc['name'] ?? '',
           subtitle: anc['category'] ?? '',
           isSelected: isSelected,
@@ -171,7 +294,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       itemBuilder: (context, index) {
         final bg = _backgrounds[index];
         final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
-        return _buildSelectionCard(
+        return _buildSimpleCard(
           title: bg['Name'] ?? '',
           subtitle: bg['Category'] ?? '',
           isSelected: isSelected,
@@ -181,7 +304,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  Widget _buildSelectionCard({
+  Widget _buildSimpleCard({
     required String title,
     required String subtitle,
     required bool isSelected,
