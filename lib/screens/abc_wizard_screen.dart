@@ -19,7 +19,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   Map<String, dynamic>? _selectedAncestry;
   Map<String, dynamic>? _selectedBackground;
 
-  int currentStep = 1; // 1 = Class, 2 = Ancestry, 3 = Background
+  int currentStep = 1;
   bool _isLoading = true;
 
   @override
@@ -42,9 +42,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   }
 
   void _goToStep(int step) {
-    setState(() {
-      currentStep = step;
-    });
+    setState(() => currentStep = step);
   }
 
   Future<void> _selectClass(Map<String, dynamic> classData) async {
@@ -79,9 +77,9 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               child: Column(
                 children: [
                   _buildProgressIndicator(),
-                  const SizedBox(height: 20),
-                  Expanded(child: _buildCurrentStep()),
                   const SizedBox(height: 16),
+                  Expanded(child: _buildCurrentStep()),
+                  const SizedBox(height: 12),
                   _buildNavigationButtons(),
                 ],
               ),
@@ -111,25 +109,25 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       child: Column(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               color: isCompleted || isActive ? Colors.brown[700] : Colors.grey[300],
               shape: BoxShape.circle,
             ),
             child: Center(
-              child: Text(step.toString(), style: TextStyle(color: isCompleted || isActive ? Colors.white : Colors.black54, fontWeight: FontWeight.bold)),
+              child: Text(step.toString(), style: TextStyle(color: isCompleted || isActive ? Colors.white : Colors.black54, fontWeight: FontWeight.bold, fontSize: 13)),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(label, style: const TextStyle(fontSize: 12)),
+          const SizedBox(height: 3),
+          Text(label, style: const TextStyle(fontSize: 11)),
         ],
       ),
     );
   }
 
   Widget _buildStepLine() {
-    return Container(width: 40, height: 2, color: Colors.brown[300], margin: const EdgeInsets.symmetric(horizontal: 4));
+    return Container(width: 32, height: 2, color: Colors.brown[300], margin: const EdgeInsets.symmetric(horizontal: 3));
   }
 
   Widget _buildCurrentStep() {
@@ -141,37 +139,109 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     }
   }
 
-  // ==================== CLASS ====================
-
   Widget _buildClassStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
         Expanded(child: _buildClassGrid()),
       ],
     );
   }
 
-  // ==================== ANCESTRY ====================
-
   Widget _buildAncestryStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
         Expanded(child: _buildAncestryGrid()),
       ],
     );
   }
 
+  Widget _buildBackgroundStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Expanded(child: _buildBackgroundGrid()),
+      ],
+    );
+  }
+
+  // ==================== CLASS ====================
+
+  Widget _buildClassGrid() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.92,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: _classDescriptors.length,
+      itemBuilder: (context, index) {
+        final cls = _classDescriptors[index];
+        final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
+        return _buildClassCard(cls: cls, isSelected: isSelected);
+      },
+    );
+  }
+
+  Widget _buildClassCard({required Map<String, dynamic> cls, required bool isSelected}) {
+    final className = cls['name'] ?? '';
+    final imagePath = 'assets/images/classes/${className.toLowerCase().replaceAll(' ', '_')}.png';
+
+    return GestureDetector(
+      onTap: () => _selectClass(cls),
+      child: Card(
+        elevation: isSelected ? 5 : 2,
+        color: isSelected ? Colors.amber[50] : Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2), decoration: BoxDecoration(color: Colors.brown[100], borderRadius: BorderRadius.circular(5)), child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600))),
+                  const Spacer(),
+                  _buildDifficultyChip(cls['difficulty']),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(className, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              if (cls['keywords'] != null)
+                Padding(padding: const EdgeInsets.only(top: 3, bottom: 4), child: Wrap(spacing: 3, children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 9)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero)).toList())),
+              Expanded(child: Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Image.asset(imagePath, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => Container(decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(6)), child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 28))))),
+              Text(cls['description'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDifficultyChip(String? difficulty) {
+    Color color = Colors.grey;
+    if (difficulty == 'Easy') color = Colors.green;
+    if (difficulty == 'Medium') color = Colors.orange;
+    if (difficulty == 'Advanced') color = Colors.redAccent;
+    if (difficulty == 'Extreme') color = Colors.purple;
+    return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 9, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero);
+  }
+
+  // ==================== ANCESTRY ====================
+
   Widget _buildAncestryGrid() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.0,
+        childAspectRatio: 1.05,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
@@ -193,18 +263,18 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GestureDetector(
       onTap: () => _selectAncestry(ancestry),
       child: Card(
-        elevation: isSelected ? 6 : 2,
+        elevation: isSelected ? 5 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(11),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 2, bottom: 6), child: Text(category, style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic))),
-              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 5, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 12, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
+              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -212,14 +282,14 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  // ==================== BACKGROUND (Now with details) ====================
+  // ==================== BACKGROUND ====================
 
   Widget _buildBackgroundStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
+        const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
         Expanded(child: _buildBackgroundGrid()),
       ],
     );
@@ -229,7 +299,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.0,
+        childAspectRatio: 1.05,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
@@ -251,18 +321,18 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GestureDetector(
       onTap: () => _selectBackground(background),
       child: Card(
-        elevation: isSelected ? 6 : 2,
+        elevation: isSelected ? 5 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(11),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 2, bottom: 6), child: Text(category, style: const TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic))),
-              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 5, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 12, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
+              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -277,22 +347,13 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
 
     return Row(
       children: [
-        if (currentStep > 1)
-          Expanded(child: OutlinedButton(onPressed: () => _goToStep(currentStep - 1), style: OutlinedButton.styleFrom(minimumSize: const Size(double.infinity, 52)), child: const Text('Back', style: TextStyle(fontSize: 16)))),
-        if (currentStep > 1) const SizedBox(width: 12),
+        if (currentStep > 1) Expanded(child: OutlinedButton(onPressed: () => _goToStep(currentStep - 1), style: OutlinedButton.styleFrom(minimumSize: const Size(double.infinity, 50)), child: const Text('Back', style: TextStyle(fontSize: 15)))),
+        if (currentStep > 1) const SizedBox(width: 10),
         Expanded(
           child: ElevatedButton(
-            onPressed: canGoNext
-                ? () {
-                    if (currentStep == 3) {
-                      Navigator.pushNamed(context, '/character_sheet');
-                    } else {
-                      _goToStep(currentStep + 1);
-                    }
-                  }
-                : null,
-            style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 52), backgroundColor: Colors.brown[700]),
-            child: Text(currentStep == 3 ? 'Continue to Character Sheet' : 'Next', style: const TextStyle(fontSize: 16)),
+            onPressed: canGoNext ? () { if (currentStep == 3) { Navigator.pushNamed(context, '/character_sheet'); } else { _goToStep(currentStep + 1); } } : null,
+            style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.brown[700]),
+            child: Text(currentStep == 3 ? 'Continue to Character Sheet' : 'Next', style: const TextStyle(fontSize: 15)),
           ),
         ),
       ],
@@ -304,76 +365,5 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     if (currentStep == 2) return _selectedAncestry != null;
     if (currentStep == 3) return _selectedBackground != null;
     return false;
-  }
-
-  // ==================== CLASS ====================
-
-  Widget _buildClassGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.95,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _classDescriptors.length,
-      itemBuilder: (context, index) {
-        final cls = _classDescriptors[index];
-        final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
-        return _buildClassCard(cls: cls, isSelected: isSelected);
-      },
-    );
-  }
-
-  Widget _buildClassCard({required Map<String, dynamic> cls, required bool isSelected}) {
-    final className = cls['name'] ?? '';
-    final imagePath = 'assets/images/classes/${className.toLowerCase().replaceAll(' ', '_')}.png';
-
-    return GestureDetector(
-      onTap: () => _selectClass(cls),
-      child: Card(
-        elevation: isSelected ? 6 : 2,
-        color: isSelected ? Colors.amber[50] : Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), decoration: BoxDecoration(color: Colors.brown[100], borderRadius: BorderRadius.circular(6)), child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600))),
-                  const Spacer(),
-                  _buildDifficultyChip(cls['difficulty']),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(className, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-              if (cls['keywords'] != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 6),
-                  child: Wrap(spacing: 4, children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 10)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero)).toList()),
-                ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Image.asset(imagePath, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => Container(decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(8)), child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 32)))),
-                ),
-              ),
-              Text(cls['description'] ?? '', maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDifficultyChip(String? difficulty) {
-    Color color = Colors.grey;
-    if (difficulty == 'Easy') color = Colors.green;
-    if (difficulty == 'Medium') color = Colors.orange;
-    if (difficulty == 'Advanced') color = Colors.redAccent;
-    if (difficulty == 'Extreme') color = Colors.purple;
-    return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 10, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero);
   }
 }
