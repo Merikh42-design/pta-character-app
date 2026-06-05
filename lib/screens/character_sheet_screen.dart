@@ -18,40 +18,65 @@ class CharacterSheetScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const RadialWheel(),
-            const SizedBox(height: 20),
+            // Radial Wheel
+            Center(child: const RadialWheel()),
+            const SizedBox(height: 24),
 
-            // ABC Summary
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Character Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const Divider(),
-                    _infoRow('Class', character.className),
-                    _infoRow('Ancestry', character.ancestry),
-                    _infoRow('Background', character.background),
-                  ],
-                ),
+            // Character Identity
+            _buildSectionCard(
+              title: 'Character',
+              child: Column(
+                children: [
+                  _infoRow('Class', character.className),
+                  _infoRow('Ancestry', character.ancestry),
+                  _infoRow('Background', character.background),
+                ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Starting Stats
-            if (character.startingStats != null) ...[
-              const Text('Starting Stats', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _buildStatChips(character.startingStats!),
+            if (character.startingStats != null)
+              _buildSectionCard(
+                title: 'Starting Stats',
+                child: _buildStatsGrid(character.startingStats!),
               ),
-            ],
+
+            const SizedBox(height: 16),
+
+            // Placeholder sections for future content
+            _buildSectionCard(
+              title: 'Abilities & Features',
+              child: const Text('Free Actions, Reactions, Maneuvers, Spells, and Chants will appear here once class data is fully integrated.'),
+            ),
+
+            const SizedBox(height: 16),
+
+            _buildSectionCard(
+              title: 'Equipment & Inventory',
+              child: const Text('Equipment will be displayed here in a future update.'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionCard({required String title, required Widget child}) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+            const Divider(height: 16),
+            child,
           ],
         ),
       ),
@@ -60,21 +85,43 @@ class CharacterSheetScreen extends ConsumerWidget {
 
   Widget _infoRow(String label, String? value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          SizedBox(width: 100, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
-          Text(value ?? 'Not selected'),
+          SizedBox(width: 110, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+          Expanded(child: Text(value ?? 'Not selected', style: const TextStyle(fontSize: 16))),
         ],
       ),
     );
   }
 
-  List<Widget> _buildStatChips(Map<String, dynamic> stats) {
-    final chips = <Widget>[];
-    stats.forEach((key, value) {
-      chips.add(Chip(label: Text('$key: $value')));
-    });
-    return chips;
+  Widget _buildStatsGrid(Map<String, dynamic> stats) {
+    final importantStats = [
+      'Body', 'Physique', 'Technique', 'Endurance',
+      'Mind', 'Intellect', 'Acuity', 'Resilience',
+      'Spirit', 'Willpower', 'Attunement', 'Resolve',
+      'Max Stamina', 'Max Mana', 'Max Morale',
+      'Defense', 'Armor', 'Run'
+    ];
+
+    final children = <Widget>[];
+
+    for (final key in importantStats) {
+      if (stats.containsKey(key) && stats[key] != null) {
+        children.add(
+          Chip(
+            label: Text('$key: ${stats[key]}'),
+            backgroundColor: Colors.brown[50],
+            labelStyle: const TextStyle(fontSize: 13),
+          ),
+        );
+      }
+    }
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: children,
+    );
   }
 }
