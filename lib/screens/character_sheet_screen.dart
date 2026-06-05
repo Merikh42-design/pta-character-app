@@ -24,6 +24,24 @@ class CharacterSheetScreen extends ConsumerWidget {
             Center(child: const RadialWheel()),
             const SizedBox(height: 24),
 
+            // View Abilities Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/abilities');
+                },
+                icon: const Icon(Icons.list_alt),
+                label: const Text('View Abilities & Features'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.brown[700],
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             // Character Identity
             _buildSectionCard(
               title: 'Character',
@@ -47,14 +65,7 @@ class CharacterSheetScreen extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // Placeholder sections for future content
-            _buildSectionCard(
-              title: 'Abilities & Features',
-              child: const Text('Free Actions, Reactions, Maneuvers, Spells, and Chants will appear here once class data is fully integrated.'),
-            ),
-
-            const SizedBox(height: 16),
-
+            // Placeholder sections
             _buildSectionCard(
               title: 'Equipment & Inventory',
               child: const Text('Equipment will be displayed here in a future update.'),
