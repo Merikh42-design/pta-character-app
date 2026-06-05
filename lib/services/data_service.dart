@@ -44,7 +44,7 @@ class DataService {
     return List<Map<String, dynamic>>.from(json.decode(jsonString));
   }
 
-  // === NEW: Class Abilities (Free Actions, Reactions, Maneuvers, Spells, Chants) ===
+  // === Class Abilities (Free Actions, Reactions, Maneuvers, Spells, Chants) ===
 
   static Future<Map<String, dynamic>> loadClassAbilities() async {
     final String jsonString =
@@ -71,6 +71,69 @@ class DataService {
     final abilities = await loadClassAbilities();
     final maneuvers = abilities['martial_attack_maneuvers'] as List? ?? [];
     return maneuvers.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Projectile Attack Maneuvers available to the given class
+  static Future<List<Map<String, dynamic>>> getProjectileManeuversForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final maneuvers = abilities['projectile_attack_maneuvers'] as List? ?? [];
+    return maneuvers.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Tactical Maneuvers available to the given class
+  static Future<List<Map<String, dynamic>>> getTacticalManeuversForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final maneuvers = abilities['tactical_maneuvers'] as List? ?? [];
+    return maneuvers.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Skill Maneuvers available to the given class
+  static Future<List<Map<String, dynamic>>> getSkillManeuversForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final maneuvers = abilities['skill_maneuvers'] as List? ?? [];
+    return maneuvers.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Attack Spells available to the given class
+  static Future<List<Map<String, dynamic>>> getAttackSpellsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final spells = abilities['attack_spells'] as List? ?? [];
+    return spells.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Tactical Spells available to the given class
+  static Future<List<Map<String, dynamic>>> getTacticalSpellsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final spells = abilities['tactical_spells'] as List? ?? [];
+    return spells.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Skill Spells available to the given class
+  static Future<List<Map<String, dynamic>>> getSkillSpellsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final spells = abilities['skill_spells'] as List? ?? [];
+    return spells.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Attack Chants available to the given class
+  static Future<List<Map<String, dynamic>>> getAttackChantsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final chants = abilities['attack_chants'] as List? ?? [];
+    return chants.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Tactical Chants available to the given class
+  static Future<List<Map<String, dynamic>>> getTacticalChantsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final chants = abilities['tactical_chants'] as List? ?? [];
+    return chants.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Skill Chants available to the given class
+  static Future<List<Map<String, dynamic>>> getSkillChantsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final chants = abilities['skill_chants'] as List? ?? [];
+    return chants.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
   }
 
   // Easy method to get a class by name (starting stats)
