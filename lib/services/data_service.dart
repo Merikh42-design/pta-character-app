@@ -30,7 +30,7 @@ class DataService {
     return json.decode(jsonString);
   }
 
-  // === NEW: Ancestry & Background Loading ===
+  // === Ancestry & Background Loading ===
 
   static Future<List<Map<String, dynamic>>> loadAncestries() async {
     final String jsonString =
@@ -44,7 +44,36 @@ class DataService {
     return List<Map<String, dynamic>>.from(json.decode(jsonString));
   }
 
-  // Easy method to get a class by name
+  // === NEW: Class Abilities (Free Actions, Reactions, Maneuvers, Spells, Chants) ===
+
+  static Future<Map<String, dynamic>> loadClassAbilities() async {
+    final String jsonString =
+        await rootBundle.loadString('data_packs/core/class_abilities.json');
+    return json.decode(jsonString);
+  }
+
+  /// Returns a list of Free Actions available to the given class
+  static Future<List<Map<String, dynamic>>> getFreeActionsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final freeActions = abilities['free_actions'] as List? ?? [];
+    return freeActions.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Reactions available to the given class
+  static Future<List<Map<String, dynamic>>> getReactionsForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final reactions = abilities['reactions'] as List? ?? [];
+    return reactions.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  /// Returns a list of Martial Attack Maneuvers available to the given class
+  static Future<List<Map<String, dynamic>>> getMartialManeuversForClass(String className) async {
+    final abilities = await loadClassAbilities();
+    final maneuvers = abilities['martial_attack_maneuvers'] as List? ?? [];
+    return maneuvers.where((a) => (a['classes'] as List).contains(className)).cast<Map<String, dynamic>>().toList();
+  }
+
+  // Easy method to get a class by name (starting stats)
   static Future<Map<String, dynamic>?> getClassByName(String name) async {
     final classes = await loadClasses();
     try {
