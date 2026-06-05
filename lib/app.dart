@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/providers/theme_provider.dart';
 import 'screens/character_sheet_screen.dart';
 import 'screens/abc_wizard_screen.dart';
+import 'screens/abilities_screen.dart';
 
 class PtaApp extends ConsumerWidget {
   const PtaApp({super.key});
@@ -18,6 +19,7 @@ class PtaApp extends ConsumerWidget {
       routes: {
         '/': (context) => const ABCWizardScreen(),
         '/character_sheet': (context) => const CharacterSheetScreen(),
+        '/abilities': (context) => const AbilitiesScreen(),
       },
       debugShowCheckedModeBanner: false,
     );
