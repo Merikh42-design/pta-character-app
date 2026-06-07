@@ -2,10 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/character.dart';
 import '../services/data_service.dart';
 
-final characterProvider = NotifierProvider<CharacterNotifier, Character>(
-  CharacterNotifier.new,
-);
-
 class CharacterNotifier extends Notifier<Character> {
   @override
   Character build() => const Character();
@@ -15,6 +11,7 @@ class CharacterNotifier extends Notifier<Character> {
 
     final stats = await DataService.getClassByName(className);
 
+    // Load from matrix
     final freeActions = await DataService.getFreeActionsForClass(className);
     final reactions = await DataService.getReactionsForClass(className);
     final martialManeuvers = await DataService.getMartialManeuversForClass(className);
@@ -28,23 +25,37 @@ class CharacterNotifier extends Notifier<Character> {
     final tacticalChants = await DataService.getTacticalChantsForClass(className);
     final skillChants = await DataService.getSkillChantsForClass(className);
 
+    // Enrich with full details from separate libraries
+    final enrichedFreeActions = await _enrichAbilities(freeActions, 'free_action');
+    final enrichedReactions = await _enrichAbilities(reactions, 'reaction');
+    final enrichedMartial = await _enrichAbilities(martialManeuvers, 'maneuver');
+    final enrichedProjectile = await _enrichAbilities(projectileManeuvers, 'maneuver');
+    final enrichedTacticalManeuvers = await _enrichAbilities(tacticalManeuvers, 'maneuver');
+    final enrichedSkillManeuvers = await _enrichAbilities(skillManeuvers, 'maneuver');
+    final enrichedAttackSpells = await _enrichAbilities(attackSpells, 'spell');
+    final enrichedTacticalSpells = await _enrichAbilities(tacticalSpells, 'spell');
+    final enrichedSkillSpells = await _enrichAbilities(skillSpells, 'spell');
+    final enrichedAttackChants = await _enrichAbilities(attackChants, 'chant');
+    final enrichedTacticalChants = await _enrichAbilities(tacticalChants, 'chant');
+    final enrichedSkillChants = await _enrichAbilities(skillChants, 'chant');
+
     final classSkills = _calculateSkillsFromClass(stats);
 
     state = state.copyWith(
       className: className,
       startingStats: stats,
-      freeActions: freeActions,
-      reactions: reactions,
-      martialManeuvers: martialManeuvers,
-      projectileManeuvers: projectileManeuvers,
-      tacticalManeuvers: tacticalManeuvers,
-      skillManeuvers: skillManeuvers,
-      attackSpells: attackSpells,
-      tacticalSpells: tacticalSpells,
-      skillSpells: skillSpells,
-      attackChants: attackChants,
-      tacticalChants: tacticalChants,
-      skillChants: skillChants,
+      freeActions: enrichedFreeActions,
+      reactions: enrichedReactions,
+      martialManeuvers: enrichedMartial,
+      projectileManeuvers: enrichedProjectile,
+      tacticalManeuvers: enrichedTacticalManeuvers,
+      skillManeuvers: enrichedSkillManeuvers,
+      attackSpells: enrichedAttackSpells,
+      tacticalSpells: enrichedTacticalSpells,
+      skillSpells: enrichedSkillSpells,
+      attackChants: enrichedAttackChants,
+      tacticalChants: enrichedTacticalChants,
+      skillChants: enrichedSkillChants,
       skills: classSkills,
       isLoadingAbilities: false,
     );
@@ -53,7 +64,6 @@ class CharacterNotifier extends Notifier<Character> {
   Future<void> selectAncestry(String ancestryName) async {
     final ancestryData = await DataService.getAncestryByName(ancestryName);
     final ancestrySkills = _extractSkillsFromData(ancestryData);
-
     final mergedSkills = _mergeSkills(state.skills, ancestrySkills);
 
     state = state.copyWith(
@@ -65,7 +75,6 @@ class CharacterNotifier extends Notifier<Character> {
   Future<void> selectBackground(String backgroundName) async {
     final backgroundData = await DataService.getBackgroundByName(backgroundName);
     final backgroundSkills = _extractSkillsFromData(backgroundData);
-
     final mergedSkills = _mergeSkills(state.skills, backgroundSkills);
 
     state = state.copyWith(
@@ -74,7 +83,44 @@ class CharacterNotifier extends Notifier<Character> {
     );
   }
 
-  // Get skills where value == true from class stats
+  // Enrich ability with details from the correct library
+  Future<List<Map<String, dynamic>>> _enrichAbilities(
+    List<Map<String, dynamic>> abilities,
+    String type,
+  ) async {
+    if (abilities.isEmpty) return [];
+
+    List<Map<String, dynamic>> library = [];
+
+    switch (type) {
+      case 'maneuver':
+        library = await DataService.loadManeuverLibrary();
+        break;
+      case 'spell':
+        library = await DataService.loadSpellLibrary();
+        break;
+      case 'chant':
+        library = await DataService.loadChantLibrary();
+        break;
+      case 'free_action':
+      case 'reaction':
+        library = await DataService.loadFreeActionReactionLibrary();
+        break;
+    }
+
+    if (library.isEmpty) return abilities; // Library not ready yet
+
+    return abilities.map((ability) {
+      final name = ability['name'];
+      try {
+        final detail = library.firstWhere((item) => item['name'] == name);
+        return {...ability, ...detail};
+      } catch (_) {
+        return ability;
+      }
+    }).toList();
+  }
+
   Map<String, String> _calculateSkillsFromClass(Map<String, dynamic>? stats) {
     if (stats == null) return {};
 
@@ -95,7 +141,6 @@ class CharacterNotifier extends Notifier<Character> {
     return result;
   }
 
-  // Extract skills array from ancestry or background data
   List<String> _extractSkillsFromData(Map<String, dynamic>? data) {
     if (data == null) return [];
     final skills = data['skills'];
@@ -105,17 +150,19 @@ class CharacterNotifier extends Notifier<Character> {
     return [];
   }
 
-  // Merge: upgrade to M if skill exists in both
   Map<String, String> _mergeSkills(Map<String, String> current, List<String> newSkills) {
     final Map<String, String> result = Map.from(current);
-
     for (final skill in newSkills) {
       if (result.containsKey(skill)) {
-        result[skill] = 'M'; // Upgrade to Mastered
+        result[skill] = 'M';
       } else {
-        result[skill] = 'P'; // New skill from ancestry/background
+        result[skill] = 'P';
       }
     }
     return result;
   }
+
+  final characterProvider = NotifierProvider<CharacterNotifier, Character>(
+    CharacterNotifier.new,
+  );
 }
