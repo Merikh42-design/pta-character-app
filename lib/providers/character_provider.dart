@@ -91,29 +91,34 @@ class CharacterNotifier extends Notifier<Character> {
     if (abilities.isEmpty) return [];
 
     List<Map<String, dynamic>> library = [];
+    String nameKey = 'name'; // default
 
     switch (type) {
       case 'maneuver':
         library = await DataService.loadManeuverLibrary();
+        nameKey = 'maneuver';
         break;
       case 'spell':
         library = await DataService.loadSpellLibrary();
+        nameKey = 'spell';
         break;
       case 'chant':
         library = await DataService.loadChantLibrary();
+        nameKey = 'chant';
         break;
       case 'free_action':
       case 'reaction':
         library = await DataService.loadFreeActionReactionLibrary();
+        nameKey = 'name'; // or adjust if they use different key
         break;
     }
 
-    if (library.isEmpty) return abilities; // Library not ready yet
+    if (library.isEmpty) return abilities;
 
     return abilities.map((ability) {
-      final name = ability['name'];
+      final abilityName = ability['name'] ?? ability['maneuver'] ?? ability['spell'] ?? ability['chant'];
       try {
-        final detail = library.firstWhere((item) => item['name'] == name);
+        final detail = library.firstWhere((item) => item[nameKey] == abilityName);
         return {...ability, ...detail};
       } catch (_) {
         return ability;
