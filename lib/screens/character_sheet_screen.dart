@@ -24,13 +24,57 @@ class CharacterSheetScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Prominent Radial Wheel
-            const SizedBox(
-              width: 320,
-              height: 320,
-              child: RadialWheel(),
+            // Artistic layout: Wheel in center with stats surrounding it
+            SizedBox(
+              height: 380,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Central Radial Wheel with knot
+                  const SizedBox(
+                    width: 280,
+                    height: 280,
+                    child: RadialWheel(),
+                  ),
+
+                  // BODY stats - positioned bottom-left of wheel
+                  Positioned(
+                    left: 10,
+                    bottom: 20,
+                    child: _buildCompactStatGroup(
+                      title: 'BODY',
+                      color: const Color(0xFF42B278),
+                      stats: character.startingStats ?? {},
+                      keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
+                    ),
+                  ),
+
+                  // MIND stats - positioned top-left of wheel
+                  Positioned(
+                    left: 10,
+                    top: 20,
+                    child: _buildCompactStatGroup(
+                      title: 'MIND',
+                      color: const Color(0xFF87CDFE),
+                      stats: character.startingStats ?? {},
+                      keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
+                    ),
+                  ),
+
+                  // SPIRIT stats - positioned right side of wheel
+                  Positioned(
+                    right: 10,
+                    top: 60,
+                    child: _buildCompactStatGroup(
+                      title: 'SPIRIT',
+                      color: const Color(0xFFC3B15B),
+                      stats: character.startingStats ?? {},
+                      keys: ['Willpower', 'Attunement', 'Resolve', 'Max Morale'],
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 16),
@@ -51,15 +95,9 @@ class CharacterSheetScreen extends ConsumerWidget {
 
             const SizedBox(height: 20),
 
-            // Skills Section
+            // Skills
             if (character.skills.isNotEmpty)
               _buildSkillsSection(character.skills),
-
-            const SizedBox(height: 20),
-
-            // Body / Mind / Spirit Stats - positioned closer to wheel
-            if (character.startingStats != null)
-              _buildThemedStatsSection(character.startingStats!),
 
             const SizedBox(height: 20),
 
@@ -73,6 +111,34 @@ class CharacterSheetScreen extends ConsumerWidget {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCompactStatGroup({
+    required String title,
+    required Color color,
+    required Map<String, dynamic> stats,
+    required List<String> keys,
+  }) {
+    final filtered = keys.where((k) => stats.containsKey(k) && stats[k] != null).toList();
+    if (filtered.isEmpty) return const SizedBox.shrink();
+
+    return Card(
+      elevation: 3,
+      color: Colors.white.withOpacity(0.95),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+            const SizedBox(height: 4),
+            ...filtered.map((k) => Text('$k: ${stats[k]}', style: const TextStyle(fontSize: 12, color: Colors.black87))).toList(),
           ],
         ),
       ),
@@ -100,64 +166,6 @@ class CharacterSheetScreen extends ConsumerWidget {
                   labelStyle: const TextStyle(fontSize: 13, color: Colors.black),
                 );
               }).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildThemedStatsSection(Map<String, dynamic> stats) {
-    return Column(
-      children: [
-        _buildStatGroup(
-          title: 'BODY',
-          color: const Color(0xFF42B278),
-          stats: stats,
-          keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
-        ),
-        const SizedBox(height: 10),
-        _buildStatGroup(
-          title: 'MIND',
-          color: const Color(0xFF87CDFE),
-          stats: stats,
-          keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
-        ),
-        const SizedBox(height: 10),
-        _buildStatGroup(
-          title: 'SPIRIT',
-          color: const Color(0xFFC3B15B),
-          stats: stats,
-          keys: ['Willpower', 'Attunement', 'Resolve', 'Max Morale'],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatGroup({
-    required String title,
-    required Color color,
-    required Map<String, dynamic> stats,
-    required List<String> keys,
-  }) {
-    final filtered = keys.where((k) => stats.containsKey(k) && stats[k] != null).toList();
-    if (filtered.isEmpty) return const SizedBox.shrink();
-
-    return Card(
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              children: filtered.map((k) => Chip(
-                label: Text('$k: ${stats[k]}', style: const TextStyle(color: Colors.black)),
-                backgroundColor: color.withOpacity(0.15),
-              )).toList(),
             ),
           ],
         ),
