@@ -13,15 +13,34 @@ class CharacterSheetScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(character.className ?? 'Character Sheet'),
-        backgroundColor: Colors.brown[700],
+        backgroundColor: Colors.brown[800],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Radial Wheel
-            Center(child: const RadialWheel()),
+            // Radial Wheel + Stats Row
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Radial Wheel
+                Expanded(
+                  flex: 3,
+                  child: const RadialWheel(),
+                ),
+
+                const SizedBox(width: 16),
+
+                // Starting Stats beside the wheel
+                if (character.startingStats != null)
+                  Expanded(
+                    flex: 2,
+                    child: _buildStatsCard(character.startingStats!),
+                  ),
+              ],
+            ),
+
             const SizedBox(height: 24),
 
             // View Abilities Button
@@ -34,7 +53,7 @@ class CharacterSheetScreen extends ConsumerWidget {
                 icon: const Icon(Icons.list_alt),
                 label: const Text('View Abilities & Features'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.brown[700],
+                  backgroundColor: Colors.brown[800],
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
@@ -56,16 +75,7 @@ class CharacterSheetScreen extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // Starting Stats
-            if (character.startingStats != null)
-              _buildSectionCard(
-                title: 'Starting Stats',
-                child: _buildStatsGrid(character.startingStats!),
-              ),
-
-            const SizedBox(height: 16),
-
-            // Placeholder sections
+            // Equipment placeholder
             _buildSectionCard(
               title: 'Equipment & Inventory',
               child: const Text('Equipment will be displayed here in a future update.'),
@@ -85,9 +95,27 @@ class CharacterSheetScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
             const Divider(height: 16),
             child,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatsCard(Map<String, dynamic> stats) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Starting Stats', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.brown[800])),
+            const SizedBox(height: 12),
+            _buildStatsGrid(stats),
           ],
         ),
       ),
@@ -99,7 +127,7 @@ class CharacterSheetScreen extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          SizedBox(width: 110, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+          SizedBox(width: 110, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.brown[800]))),
           Expanded(child: Text(value ?? 'Not selected', style: const TextStyle(fontSize: 16))),
         ],
       ),
@@ -121,17 +149,17 @@ class CharacterSheetScreen extends ConsumerWidget {
       if (stats.containsKey(key) && stats[key] != null) {
         children.add(
           Chip(
-            label: Text('$key: ${stats[key]}'),
-            backgroundColor: Colors.brown[50],
-            labelStyle: const TextStyle(fontSize: 13),
+            label: Text('$key: ${stats[key]}', style: const TextStyle(fontSize: 12)),
+            backgroundColor: Colors.brown[100],
+            labelStyle: const TextStyle(fontSize: 12, color: Colors.brown[900]),
           ),
         );
       }
     }
 
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: 6,
+      runSpacing: 6,
       children: children,
     );
   }
