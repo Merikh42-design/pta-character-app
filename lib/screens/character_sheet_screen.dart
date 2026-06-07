@@ -24,11 +24,18 @@ class CharacterSheetScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const RadialWheel(),
+            // Prominent Radial Wheel
+            const SizedBox(
+              width: 320,
+              height: 320,
+              child: RadialWheel(),
+            ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
+            // View Abilities Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -42,19 +49,19 @@ class CharacterSheetScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // Skills Section (P / M)
+            // Skills Section
             if (character.skills.isNotEmpty)
               _buildSkillsSection(character.skills),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // Body / Mind / Spirit Stats
+            // Body / Mind / Spirit Stats - positioned closer to wheel
             if (character.startingStats != null)
               _buildThemedStatsSection(character.startingStats!),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             _buildSectionCard(
               title: 'Character',
@@ -80,17 +87,17 @@ class CharacterSheetScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Skills', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+            const Text('Skills', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
             const Divider(),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: skills.entries.map((entry) {
-                final value = entry.value; // P or M
+                final value = entry.value;
                 return Chip(
                   label: Text('${entry.key}: $value'),
-                  backgroundColor: value == 'M' ? Colors.amber[100] : Colors.green[100],
-                  labelStyle: const TextStyle(fontSize: 13),
+                  backgroundColor: value == 'M' ? Colors.amber[200] : Colors.green[100],
+                  labelStyle: const TextStyle(fontSize: 13, color: Colors.black),
                 );
               }).toList(),
             ),
@@ -109,14 +116,14 @@ class CharacterSheetScreen extends ConsumerWidget {
           stats: stats,
           keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         _buildStatGroup(
           title: 'MIND',
           color: const Color(0xFF87CDFE),
           stats: stats,
           keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         _buildStatGroup(
           title: 'SPIRIT',
           color: const Color(0xFFC3B15B),
@@ -137,20 +144,20 @@ class CharacterSheetScreen extends ConsumerWidget {
     if (filtered.isEmpty) return const SizedBox.shrink();
 
     return Card(
+      elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
-              child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: color)),
-            ),
-            const SizedBox(height: 8),
+            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+            const SizedBox(height: 6),
             Wrap(
               spacing: 6,
-              children: filtered.map((k) => Chip(label: Text('$k: ${stats[k]}'))).toList(),
+              children: filtered.map((k) => Chip(
+                label: Text('$k: ${stats[k]}', style: const TextStyle(color: Colors.black)),
+                backgroundColor: color.withOpacity(0.15),
+              )).toList(),
             ),
           ],
         ),
@@ -160,12 +167,13 @@ class CharacterSheetScreen extends ConsumerWidget {
 
   Widget _buildSectionCard({required String title, required Widget child}) {
     return Card(
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
             const Divider(),
             child,
           ],
@@ -179,7 +187,7 @@ class CharacterSheetScreen extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          SizedBox(width: 100, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+          SizedBox(width: 100, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black))),
           Text(value ?? 'Not selected'),
         ],
       ),
