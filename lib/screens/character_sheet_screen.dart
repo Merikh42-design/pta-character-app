@@ -25,7 +25,7 @@ class CharacterSheetScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Pie-style thirds layout around the wheel
+            // Pie-style layout with Body on top, Mind & Spirit on bottom
             SizedBox(
               height: 400,
               child: Stack(
@@ -38,11 +38,11 @@ class CharacterSheetScreen extends ConsumerWidget {
                     child: RadialWheel(),
                   ),
 
-                  // === BODY (Green) - Bottom third ===
+                  // === BODY (Green) - Top third ===
                   Align(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.only(top: 8),
                       child: _buildPieSliceStat(
                         title: 'BODY',
                         color: const Color(0xFF42B278),
@@ -52,11 +52,11 @@ class CharacterSheetScreen extends ConsumerWidget {
                     ),
                   ),
 
-                  // === MIND (Blue) - Top-left third ===
+                  // === MIND (Blue) - Bottom-left ===
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.bottomLeft,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 20),
+                      padding: const EdgeInsets.only(bottom: 12, left: 16),
                       child: _buildPieSliceStat(
                         title: 'MIND',
                         color: const Color(0xFF87CDFE),
@@ -66,11 +66,11 @@ class CharacterSheetScreen extends ConsumerWidget {
                     ),
                   ),
 
-                  // === SPIRIT (Gold) - Top-right third ===
+                  // === SPIRIT (Gold) - Bottom-right ===
                   Align(
-                    alignment: Alignment.topRight,
+                    alignment: Alignment.bottomRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20, right: 20),
+                      padding: const EdgeInsets.only(bottom: 12, right: 16),
                       child: _buildPieSliceStat(
                         title: 'SPIRIT',
                         color: const Color(0xFFC3B15B),
