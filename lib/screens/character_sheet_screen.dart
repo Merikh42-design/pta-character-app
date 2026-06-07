@@ -25,59 +25,65 @@ class CharacterSheetScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Artistic layout: Wheel in center with stats surrounding it
+            // Pie-style thirds layout around the wheel
             SizedBox(
-              height: 380,
+              height: 400,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Central Radial Wheel with knot
+                  // Central Radial Wheel
                   const SizedBox(
-                    width: 280,
-                    height: 280,
+                    width: 260,
+                    height: 260,
                     child: RadialWheel(),
                   ),
 
-                  // BODY stats - positioned bottom-left of wheel
-                  Positioned(
-                    left: 10,
-                    bottom: 20,
-                    child: _buildCompactStatGroup(
-                      title: 'BODY',
-                      color: const Color(0xFF42B278),
-                      stats: character.startingStats ?? {},
-                      keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
+                  // === BODY (Green) - Bottom third ===
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: _buildPieSliceStat(
+                        title: 'BODY',
+                        color: const Color(0xFF42B278),
+                        stats: character.startingStats ?? {},
+                        keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
+                      ),
                     ),
                   ),
 
-                  // MIND stats - positioned top-left of wheel
-                  Positioned(
-                    left: 10,
-                    top: 20,
-                    child: _buildCompactStatGroup(
-                      title: 'MIND',
-                      color: const Color(0xFF87CDFE),
-                      stats: character.startingStats ?? {},
-                      keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
+                  // === MIND (Blue) - Top-left third ===
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20, left: 20),
+                      child: _buildPieSliceStat(
+                        title: 'MIND',
+                        color: const Color(0xFF87CDFE),
+                        stats: character.startingStats ?? {},
+                        keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
+                      ),
                     ),
                   ),
 
-                  // SPIRIT stats - positioned right side of wheel
-                  Positioned(
-                    right: 10,
-                    top: 60,
-                    child: _buildCompactStatGroup(
-                      title: 'SPIRIT',
-                      color: const Color(0xFFC3B15B),
-                      stats: character.startingStats ?? {},
-                      keys: ['Willpower', 'Attunement', 'Resolve', 'Max Morale'],
+                  // === SPIRIT (Gold) - Top-right third ===
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20, right: 20),
+                      child: _buildPieSliceStat(
+                        title: 'SPIRIT',
+                        color: const Color(0xFFC3B15B),
+                        stats: character.startingStats ?? {},
+                        keys: ['Willpower', 'Attunement', 'Resolve', 'Max Morale'],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
             // View Abilities Button
             SizedBox(
@@ -93,13 +99,13 @@ class CharacterSheetScreen extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Skills
             if (character.skills.isNotEmpty)
               _buildSkillsSection(character.skills),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             _buildSectionCard(
               title: 'Character',
@@ -117,7 +123,7 @@ class CharacterSheetScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCompactStatGroup({
+  Widget _buildPieSliceStat({
     required String title,
     required Color color,
     required Map<String, dynamic> stats,
@@ -127,16 +133,16 @@ class CharacterSheetScreen extends ConsumerWidget {
     if (filtered.isEmpty) return const SizedBox.shrink();
 
     return Card(
-      elevation: 3,
-      color: Colors.white.withOpacity(0.95),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 4,
+      color: Colors.white.withOpacity(0.92),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+            Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: color)),
             const SizedBox(height: 4),
             ...filtered.map((k) => Text('$k: ${stats[k]}', style: const TextStyle(fontSize: 12, color: Colors.black87))).toList(),
           ],
