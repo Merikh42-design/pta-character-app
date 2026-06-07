@@ -18,28 +18,9 @@ class CharacterSheetScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Radial Wheel + Stats Row
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Radial Wheel
-                Expanded(
-                  flex: 3,
-                  child: const RadialWheel(),
-                ),
-
-                const SizedBox(width: 16),
-
-                // Starting Stats beside the wheel
-                if (character.startingStats != null)
-                  Expanded(
-                    flex: 2,
-                    child: _buildStatsCard(character.startingStats!),
-                  ),
-              ],
-            ),
+            // Central Radial Wheel
+            const RadialWheel(),
 
             const SizedBox(height: 24),
 
@@ -47,9 +28,7 @@ class CharacterSheetScreen extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/abilities');
-                },
+                onPressed: () => Navigator.pushNamed(context, '/abilities'),
                 icon: const Icon(Icons.list_alt),
                 label: const Text('View Abilities & Features'),
                 style: ElevatedButton.styleFrom(
@@ -58,6 +37,12 @@ class CharacterSheetScreen extends ConsumerWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 24),
+
+            // Body / Mind / Spirit Stat Groups (themed around the wheel)
+            if (character.startingStats != null)
+              _buildThemedStatsSection(character.startingStats!),
 
             const SizedBox(height: 24),
 
@@ -72,13 +57,90 @@ class CharacterSheetScreen extends ConsumerWidget {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
 
-            const SizedBox(height: 16),
+  Widget _buildThemedStatsSection(Map<String, dynamic> stats) {
+    return Column(
+      children: [
+        // BODY - Green
+        _buildStatGroup(
+          title: 'BODY',
+          color: const Color(0xFF42B278),
+          stats: stats,
+          keys: ['Physique', 'Technique', 'Endurance', 'Max Stamina'],
+        ),
 
-            // Equipment placeholder
-            _buildSectionCard(
-              title: 'Equipment & Inventory',
-              child: const Text('Equipment will be displayed here in a future update.'),
+        const SizedBox(height: 16),
+
+        // MIND - Blue
+        _buildStatGroup(
+          title: 'MIND',
+          color: const Color(0xFF87CDFE),
+          stats: stats,
+          keys: ['Intellect', 'Acuity', 'Resilience', 'Max Mana'],
+        ),
+
+        const SizedBox(height: 16),
+
+        // SPIRIT - Gold
+        _buildStatGroup(
+          title: 'SPIRIT',
+          color: const Color(0xFFC3B15B),
+          stats: stats,
+          keys: ['Willpower', 'Attunement', 'Resolve', 'Max Morale'],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatGroup({
+    required String title,
+    required Color color,
+    required Map<String, dynamic> stats,
+    required List<String> keys,
+  }) {
+    final filteredStats = keys.where((k) => stats.containsKey(k) && stats[k] != null).toList();
+
+    if (filteredStats.isEmpty) return const SizedBox.shrink();
+
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: filteredStats.map((key) {
+                return Chip(
+                  label: Text('$key: ${stats[key]}'),
+                  backgroundColor: color.withOpacity(0.1),
+                  labelStyle: const TextStyle(fontSize: 13),
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -104,24 +166,6 @@ class CharacterSheetScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsCard(Map<String, dynamic> stats) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Starting Stats', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.brown[800])),
-            const SizedBox(height: 12),
-            _buildStatsGrid(stats),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _infoRow(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -131,36 +175,6 @@ class CharacterSheetScreen extends ConsumerWidget {
           Expanded(child: Text(value ?? 'Not selected', style: const TextStyle(fontSize: 16))),
         ],
       ),
-    );
-  }
-
-  Widget _buildStatsGrid(Map<String, dynamic> stats) {
-    final importantStats = [
-      'Body', 'Physique', 'Technique', 'Endurance',
-      'Mind', 'Intellect', 'Acuity', 'Resilience',
-      'Spirit', 'Willpower', 'Attunement', 'Resolve',
-      'Max Stamina', 'Max Mana', 'Max Morale',
-      'Defense', 'Armor', 'Run'
-    ];
-
-    final children = <Widget>[];
-
-    for (final key in importantStats) {
-      if (stats.containsKey(key) && stats[key] != null) {
-        children.add(
-          Chip(
-            label: Text('$key: ${stats[key]}', style: const TextStyle(fontSize: 12)),
-            backgroundColor: Colors.brown[100],
-            labelStyle: const TextStyle(fontSize: 12, color: Colors.brown[900]),
-          ),
-        );
-      }
-    }
-
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      children: children,
     );
   }
 }
