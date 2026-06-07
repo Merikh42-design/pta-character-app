@@ -113,7 +113,7 @@ class AbilitiesScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
+        Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
         const SizedBox(height: 8),
         ...abilities.map((ability) => _buildExpandableAbilityCard(ability)).toList(),
       ],
