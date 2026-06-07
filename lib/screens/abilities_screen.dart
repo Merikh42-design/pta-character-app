@@ -124,10 +124,10 @@ class AbilitiesScreen extends ConsumerWidget {
     final name = ability['name'] ?? 'Unknown';
     final skill = ability['skill'] ?? '';
     final cost = ability['cost'] ?? '';
-
-    // Show whatever detail fields exist
-    final trigger = ability['trigger'] ?? ability['effect'] ?? '';
-    final description = ability['description'] ?? '';
+    final range = ability['range'] ?? '';
+    final damage = ability['damage'] ?? '';
+    final duration = ability['duration'] ?? '';
+    final effect = ability['effect'] ?? ability['trigger'] ?? ability['description'] ?? '';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -154,22 +154,38 @@ class AbilitiesScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (trigger.isNotEmpty)
-                  Text('Trigger/Effect: $trigger', style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                if (description.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(description, style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                  ),
-                if (trigger.isEmpty && description.isEmpty)
+                if (range.isNotEmpty)
+                  _detailRow('Range', range),
+                if (damage.isNotEmpty)
+                  _detailRow('Damage', damage),
+                if (duration.isNotEmpty)
+                  _detailRow('Duration', duration),
+                if (effect.isNotEmpty)
+                  _detailRow('Effect', effect),
+                if (range.isEmpty && damage.isEmpty && duration.isEmpty && effect.isEmpty)
                   const Text(
-                    'Detailed effect information not yet available for this ability.',
+                    'Detailed information not yet available for this ability.',
                     style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54),
                   ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _detailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
+          children: [
+            TextSpan(text: '$label: ', style: const TextStyle(fontWeight: FontWeight.w600)),
+            TextSpan(text: value),
+          ],
+        ),
       ),
     );
   }
