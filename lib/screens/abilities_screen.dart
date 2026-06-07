@@ -14,7 +14,7 @@ class AbilitiesScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Abilities & Features'),
-          backgroundColor: Colors.brown[700],
+          backgroundColor: Colors.brown[800],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Actions'),
@@ -113,54 +113,58 @@ class AbilitiesScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
         const SizedBox(height: 8),
-        ...abilities.map((ability) => _buildAbilityCard(ability)).toList(),
+        ...abilities.map((ability) => _buildExpandableAbilityCard(ability)).toList(),
       ],
     );
   }
 
-  Widget _buildAbilityCard(Map<String, dynamic> ability) {
+  Widget _buildExpandableAbilityCard(Map<String, dynamic> ability) {
     final name = ability['name'] ?? 'Unknown';
     final skill = ability['skill'] ?? '';
     final cost = ability['cost'] ?? '';
-    final trigger = ability['trigger'] ?? ability['effect'] ?? '';
+    final trigger = ability['trigger'] ?? '';
+    final effect = ability['effect'] ?? '';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: ExpansionTile(
+        title: Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                if (cost.isNotEmpty)
-                  Chip(
-                    label: Text(cost),
-                    visualDensity: VisualDensity.compact,
-                    backgroundColor: Colors.brown[100],
-                  ),
-              ],
-            ),
-            if (skill.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text('Skill: $skill', style: const TextStyle(fontSize: 13, color: Colors.grey)),
+            Expanded(
+              child: Text(
+                name,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-            if (trigger.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(trigger, style: const TextStyle(fontSize: 14)),
+            ),
+            if (cost.isNotEmpty)
+              Chip(
+                label: Text(cost, style: const TextStyle(fontSize: 12)),
+                visualDensity: VisualDensity.compact,
+                backgroundColor: Colors.brown[100],
               ),
           ],
         ),
+        subtitle: skill.isNotEmpty ? Text('Skill: $skill', style: const TextStyle(fontSize: 13, color: Colors.grey)) : null,
+        children: [
+          if (trigger.isNotEmpty || effect.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (trigger.isNotEmpty)
+                    Text('Trigger: $trigger', style: const TextStyle(fontSize: 14)),
+                  if (effect.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text('Effect: $effect', style: const TextStyle(fontSize: 14)),
+                    ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
