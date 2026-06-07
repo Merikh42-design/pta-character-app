@@ -18,6 +18,11 @@ class Character {
   final List<Map<String, dynamic>> tacticalChants;
   final List<Map<String, dynamic>> skillChants;
 
+  // Skills with P (Proficient from class) or M (Mastered from class + ancestry/background)
+  final Map<String, String> skills; // skillName -> "P" or "M"
+
+  final bool isLoadingAbilities;
+
   const Character({
     this.className,
     this.ancestry,
@@ -35,6 +40,8 @@ class Character {
     this.attackChants = const [],
     this.tacticalChants = const [],
     this.skillChants = const [],
+    this.skills = const {},
+    this.isLoadingAbilities = false,
   });
 
   Character copyWith({
@@ -54,6 +61,8 @@ class Character {
     List<Map<String, dynamic>>? attackChants,
     List<Map<String, dynamic>>? tacticalChants,
     List<Map<String, dynamic>>? skillChants,
+    Map<String, String>? skills,
+    bool? isLoadingAbilities,
   }) {
     return Character(
       className: className ?? this.className,
@@ -72,6 +81,8 @@ class Character {
       attackChants: attackChants ?? this.attackChants,
       tacticalChants: tacticalChants ?? this.tacticalChants,
       skillChants: skillChants ?? this.skillChants,
+      skills: skills ?? this.skills,
+      isLoadingAbilities: isLoadingAbilities ?? this.isLoadingAbilities,
     );
   }
 }
