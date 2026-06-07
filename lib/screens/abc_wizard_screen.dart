@@ -217,7 +217,28 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               Text(className, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               if (cls['keywords'] != null)
                 Padding(padding: const EdgeInsets.only(top: 3, bottom: 4), child: Wrap(spacing: 3, children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 9)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero)).toList())),
-              Expanded(child: Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Image.asset(imagePath, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => Container(decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(6)), child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 28))))),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.image_outlined,
+                          color: Colors.grey,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Text(cls['description'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11)),
             ],
           ),
@@ -274,7 +295,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
               if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -283,17 +304,6 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
   }
 
   // ==================== BACKGROUND ====================
-
-  Widget _buildBackgroundStep() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Expanded(child: _buildBackgroundGrid()),
-      ],
-    );
-  }
 
   Widget _buildBackgroundGrid() {
     return GridView.builder(
@@ -332,7 +342,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
               Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
               if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: const TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -367,3 +377,6 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return false;
   }
 }
+
+
+
