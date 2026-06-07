@@ -113,7 +113,7 @@ class AbilitiesScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[800])),
+        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
         const SizedBox(height: 8),
         ...abilities.map((ability) => _buildExpandableAbilityCard(ability)).toList(),
       ],
@@ -124,8 +124,10 @@ class AbilitiesScreen extends ConsumerWidget {
     final name = ability['name'] ?? 'Unknown';
     final skill = ability['skill'] ?? '';
     final cost = ability['cost'] ?? '';
-    final trigger = ability['trigger'] ?? '';
-    final effect = ability['effect'] ?? '';
+
+    // Show whatever detail fields exist
+    final trigger = ability['trigger'] ?? ability['effect'] ?? '';
+    final description = ability['description'] ?? '';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -133,37 +135,40 @@ class AbilitiesScreen extends ConsumerWidget {
         title: Row(
           children: [
             Expanded(
-              child: Text(
-                name,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              child: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
             ),
             if (cost.isNotEmpty)
               Chip(
-                label: Text(cost, style: const TextStyle(fontSize: 12)),
+                label: Text(cost, style: const TextStyle(fontSize: 12, color: Colors.black)),
                 visualDensity: VisualDensity.compact,
                 backgroundColor: Colors.brown[100],
               ),
           ],
         ),
-        subtitle: skill.isNotEmpty ? Text('Skill: $skill', style: const TextStyle(fontSize: 13, color: Colors.grey)) : null,
+        subtitle: skill.isNotEmpty 
+            ? Text('Skill: $skill', style: const TextStyle(fontSize: 13, color: Colors.black54)) 
+            : null,
         children: [
-          if (trigger.isNotEmpty || effect.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (trigger.isNotEmpty)
-                    Text('Trigger: $trigger', style: const TextStyle(fontSize: 14)),
-                  if (effect.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text('Effect: $effect', style: const TextStyle(fontSize: 14)),
-                    ),
-                ],
-              ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (trigger.isNotEmpty)
+                  Text('Trigger/Effect: $trigger', style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                if (description.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(description, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                  ),
+                if (trigger.isEmpty && description.isEmpty)
+                  const Text(
+                    'Detailed effect information not yet available for this ability.',
+                    style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54),
+                  ),
+              ],
             ),
+          ),
         ],
       ),
     );
