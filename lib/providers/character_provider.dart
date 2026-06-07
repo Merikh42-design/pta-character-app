@@ -24,8 +24,7 @@ class CharacterNotifier extends Notifier<Character> {
     final tacticalChants = await DataService.getTacticalChantsForClass(className);
     final skillChants = await DataService.getSkillChantsForClass(className);
 
-    // Calculate skills from class (true = P)
-    final Map<String, String> newSkills = _calculateSkillsFromClass(stats);
+    final classSkills = _calculateSkillsFromClass(stats);
 
     state = state.copyWith(
       className: className,
@@ -42,36 +41,40 @@ class CharacterNotifier extends Notifier<Character> {
       attackChants: attackChants,
       tacticalChants: tacticalChants,
       skillChants: skillChants,
-      skills: newSkills,
+      skills: classSkills,
       isLoadingAbilities: false,
     );
   }
 
   Future<void> selectAncestry(String ancestryName) async {
-    final newSkills = _mergeSkillsWithAncestryOrBackground(state.skills, ancestryName, isAncestry: true);
+    final ancestryData = await DataService.getAncestryByName(ancestryName);
+    final ancestrySkills = _extractSkillsFromData(ancestryData);
+
+    final mergedSkills = _mergeSkills(state.skills, ancestrySkills);
 
     state = state.copyWith(
       ancestry: ancestryName,
-      skills: newSkills,
+      skills: mergedSkills,
     );
   }
 
   Future<void> selectBackground(String backgroundName) async {
-    final newSkills = _mergeSkillsWithAncestryOrBackground(state.skills, backgroundName, isAncestry: false);
+    final backgroundData = await DataService.getBackgroundByName(backgroundName);
+    final backgroundSkills = _extractSkillsFromData(backgroundData);
+
+    final mergedSkills = _mergeSkills(state.skills, backgroundSkills);
 
     state = state.copyWith(
       background: backgroundName,
-      skills: newSkills,
+      skills: mergedSkills,
     );
   }
 
-  // Helper: Get skills from class (where value == true)
+  // Get skills where value == true from class stats
   Map<String, String> _calculateSkillsFromClass(Map<String, dynamic>? stats) {
     if (stats == null) return {};
 
     final Map<String, String> result = {};
-
-    // List of known skill fields in classes.json
     final skillFields = [
       'Arcana', 'Control', 'Focus', 'Knowledge', 'Medicine', 'Intuition',
       'Investigate', 'Perception', 'Research', 'Summon',
@@ -85,20 +88,31 @@ class CharacterNotifier extends Notifier<Character> {
         result[field] = 'P';
       }
     }
-
     return result;
   }
 
-  // Helper: Merge ancestry or background skills (upgrade to M if overlap)
-  Map<String, String> _mergeSkillsWithAncestryOrBackground(
-    Map<String, String> currentSkills,
-    String name,
-    {required bool isAncestry},
-  ) {
-    // For now, we only upgrade if ancestry/background has the skill
-    // Full implementation would require loading ancestry/background skill lists
-    // This is a placeholder that can be expanded
-    return currentSkills;
+  // Extract skills array from ancestry or background data
+  List<String> _extractSkillsFromData(Map<String, dynamic>? data) {
+    if (data == null) return [];
+    final skills = data['skills'];
+    if (skills is List) {
+      return skills.map((e) => e.toString()).toList();
+    }
+    return [];
+  }
+
+  // Merge: upgrade to M if skill exists in both
+  Map<String, String> _mergeSkills(Map<String, String> current, List<String> newSkills) {
+    final Map<String, String> result = Map.from(current);
+
+    for (final skill in newSkills) {
+      if (result.containsKey(skill)) {
+        result[skill] = 'M'; // Upgrade to Mastered
+      } else {
+        result[skill] = 'P'; // New skill from ancestry/background
+      }
+    }
+    return result;
   }
 
   final characterProvider = NotifierProvider<CharacterNotifier, Character>(
