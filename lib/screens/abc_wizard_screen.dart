@@ -145,7 +145,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       children: [
         const Text('Step 1: Choose Your Class', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Expanded(child: _buildClassGrid()),
+        Expanded(child: _buildGroupedClassList()),
       ],
     );
   }
@@ -156,7 +156,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       children: [
         const Text('Step 2: Choose Your Ancestry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Expanded(child: _buildAncestryGrid()),
+        Expanded(child: _buildGroupedAncestryList()),
       ],
     );
   }
@@ -167,29 +167,131 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
       children: [
         const Text('Step 3: Choose Your Background', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Expanded(child: _buildBackgroundGrid()),
+        Expanded(child: _buildGroupedBackgroundList()),
       ],
     );
   }
 
-  // ==================== CLASS ====================
+  // ==================== GROUPED LISTS (Collapsible by Category) ====================
 
-  Widget _buildClassGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.92,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _classDescriptors.length,
-      itemBuilder: (context, index) {
-        final cls = _classDescriptors[index];
-        final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
-        return _buildClassCard(cls: cls, isSelected: isSelected);
-      },
+  Map<String, List<Map<String, dynamic>>> _groupByCategory(List<Map<String, dynamic>> items) {
+    final Map<String, List<Map<String, dynamic>>> grouped = {};
+    for (final item in items) {
+      final category = item['category'] ?? item['Category'] ?? 'Other';
+      grouped.putIfAbsent(category, () => []).add(item);
+    }
+    return grouped;
+  }
+
+  Widget _buildGroupedClassList() {
+    final grouped = _groupByCategory(_classDescriptors);
+    final categories = grouped.keys.toList()..sort();
+
+    return ListView(
+      children: categories.map((category) {
+        final items = grouped[category]!;
+        return ExpansionTile(
+          title: Text(category, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+          initiallyExpanded: true, // or false to start collapsed
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.92,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final cls = items[index];
+                  final isSelected = _selectedClass != null && _selectedClass!['name'] == cls['name'];
+                  return _buildClassCard(cls: cls, isSelected: isSelected);
+                },
+              ),
+            ),
+          ],
+        );
+      }).toList(),
     );
   }
+
+  Widget _buildGroupedAncestryList() {
+    final grouped = _groupByCategory(_ancestries);
+    final categories = grouped.keys.toList()..sort();
+
+    return ListView(
+      children: categories.map((category) {
+        final items = grouped[category]!;
+        return ExpansionTile(
+          title: Text(category, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+          initiallyExpanded: false,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.05,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final anc = items[index];
+                  final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
+                  return _buildAncestryCard(ancestry: anc, isSelected: isSelected);
+                },
+              ),
+            ),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildGroupedBackgroundList() {
+    final grouped = _groupByCategory(_backgrounds);
+    final categories = grouped.keys.toList()..sort();
+
+    return ListView(
+      children: categories.map((category) {
+        final items = grouped[category]!;
+        return ExpansionTile(
+          title: Text(category, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
+          initiallyExpanded: false,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.05,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final bg = items[index];
+                  final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
+                  return _buildBackgroundCard(background: bg, isSelected: isSelected);
+                },
+              ),
+            ),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  // ==================== CLASS CARD ====================
 
   Widget _buildClassCard({required Map<String, dynamic> cls, required bool isSelected}) {
     final className = cls['name'] ?? '';
@@ -256,24 +358,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 9, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero);
   }
 
-  // ==================== ANCESTRY ====================
-
-  Widget _buildAncestryGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.05,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _ancestries.length,
-      itemBuilder: (context, index) {
-        final anc = _ancestries[index];
-        final isSelected = _selectedAncestry != null && _selectedAncestry!['name'] == anc['name'];
-        return _buildAncestryCard(ancestry: anc, isSelected: isSelected);
-      },
-    );
-  }
+  // ==================== ANCESTRY CARD ====================
 
   Widget _buildAncestryCard({required Map<String, dynamic> ancestry, required bool isSelected}) {
     final name = ancestry['name'] ?? '';
@@ -303,24 +388,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  // ==================== BACKGROUND ====================
-
-  Widget _buildBackgroundGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.05,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _backgrounds.length,
-      itemBuilder: (context, index) {
-        final bg = _backgrounds[index];
-        final isSelected = _selectedBackground != null && _selectedBackground!['Name'] == bg['Name'];
-        return _buildBackgroundCard(background: bg, isSelected: isSelected);
-      },
-    );
-  }
+  // ==================== BACKGROUND CARD ====================
 
   Widget _buildBackgroundCard({required Map<String, dynamic> background, required bool isSelected}) {
     final name = background['Name'] ?? background['name'] ?? '';
@@ -377,6 +445,3 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return false;
   }
 }
-
-
-
