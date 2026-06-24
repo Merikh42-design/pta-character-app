@@ -25,6 +25,10 @@ class CharacterSheetScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            // Class Portrait (full official art)
+            if (character.className != null)
+              _buildClassPortrait(character.className!),
+
             // Pie-style layout with Body on top, Mind & Spirit on bottom
             SizedBox(
               height: 400,
@@ -118,6 +122,50 @@ class CharacterSheetScreen extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClassPortrait(String className) {
+    final imagePath = 'assets/images/class_art/${className.toLowerCase()}.png';
+
+    return Card(
+      elevation: 6,
+      margin: const EdgeInsets.only(bottom: 20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
+          height: 320,
+          errorBuilder: (context, error, stackTrace) => Container(
+            height: 220,
+            decoration: BoxDecoration(
+              color: Colors.brown[50],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.image_outlined, size: 56, color: Colors.brown[300]),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Official art for $className\ncoming soon',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.brown[400],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
