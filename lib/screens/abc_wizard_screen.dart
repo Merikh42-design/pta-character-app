@@ -192,7 +192,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
         final items = grouped[category]!;
         return ExpansionTile(
           title: Text(category, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown)),
-          initiallyExpanded: true, // or false to start collapsed
+          initiallyExpanded: true,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -201,9 +201,9 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.92,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.15,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
@@ -237,9 +237,9 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 1.05,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.25,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
@@ -273,9 +273,9 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 1.05,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.25,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
@@ -291,7 +291,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  // ==================== CLASS CARD ====================
+  // ==================== COMPACT CLASS CARD ====================
 
   Widget _buildClassCard({required Map<String, dynamic> cls, required bool isSelected}) {
     final className = cls['name'] ?? '';
@@ -300,48 +300,48 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GestureDetector(
       onTap: () => _selectClass(cls),
       child: Card(
-        elevation: isSelected ? 5 : 2,
+        elevation: isSelected ? 4 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Container(padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2), decoration: BoxDecoration(color: Colors.brown[100], borderRadius: BorderRadius.circular(5)), child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600))),
+                  Container(padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1), decoration: BoxDecoration(color: Colors.brown[100], borderRadius: BorderRadius.circular(4)), child: Text(cls['category'] ?? '', style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600))),
                   const Spacer(),
                   _buildDifficultyChip(cls['difficulty']),
                 ],
               ),
-              const SizedBox(height: 6),
-              Text(className, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(className, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               if (cls['keywords'] != null)
-                Padding(padding: const EdgeInsets.only(top: 3, bottom: 4), child: Wrap(spacing: 3, children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 9)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero)).toList())),
+                Padding(padding: const EdgeInsets.only(top: 2, bottom: 3), child: Wrap(spacing: 2, children: (cls['keywords'] as List).map((k) => Chip(label: Text(k.toString(), style: const TextStyle(fontSize: 8)), visualDensity: VisualDensity.compact, padding: EdgeInsets.zero, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap)).toList())),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Image.asset(
                     imagePath,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) => Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Center(
                         child: Icon(
                           Icons.image_outlined,
                           color: Colors.grey,
-                          size: 28,
+                          size: 22,
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              Text(cls['description'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11)),
+              Text(cls['description'] ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
             ],
           ),
         ),
@@ -355,10 +355,10 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     if (difficulty == 'Medium') color = Colors.orange;
     if (difficulty == 'Advanced') color = Colors.redAccent;
     if (difficulty == 'Extreme') color = Colors.purple;
-    return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 9, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero);
+    return Chip(label: Text(difficulty ?? '', style: const TextStyle(fontSize: 8, color: Colors.white)), backgroundColor: color, visualDensity: VisualDensity.compact, padding: EdgeInsets.zero, materialTapTargetSize: MaterialTapTargetSize.shrinkWrap);
   }
 
-  // ==================== ANCESTRY CARD ====================
+  // ==================== COMPACT ANCESTRY CARD ====================
 
   Widget _buildAncestryCard({required Map<String, dynamic> ancestry, required bool isSelected}) {
     final name = ancestry['name'] ?? '';
@@ -369,18 +369,18 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GestureDetector(
       onTap: () => _selectAncestry(ancestry),
       child: Card(
-        elevation: isSelected ? 5 : 2,
+        elevation: isSelected ? 4 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
-          padding: const EdgeInsets.all(11),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
-              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 3), child: Text(category, style: const TextStyle(fontSize: 10, color: Colors.grey, fontStyle: FontStyle.italic))),
+              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 10, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -388,7 +388,7 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     );
   }
 
-  // ==================== BACKGROUND CARD ====================
+  // ==================== COMPACT BACKGROUND CARD ====================
 
   Widget _buildBackgroundCard({required Map<String, dynamic> background, required bool isSelected}) {
     final name = background['Name'] ?? background['name'] ?? '';
@@ -399,18 +399,18 @@ class _ABCWizardScreenState extends ConsumerState<ABCWizardScreen> {
     return GestureDetector(
       onTap: () => _selectBackground(background),
       child: Card(
-        elevation: isSelected ? 5 : 2,
+        elevation: isSelected ? 4 : 2,
         color: isSelected ? Colors.amber[50] : Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: isSelected ? const BorderSide(color: Colors.amber, width: 2) : BorderSide.none),
         child: Padding(
-          padding: const EdgeInsets.all(11),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 5), child: Text(category, style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic))),
-              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 6, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12.5))),
-              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 6), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 11, color: Colors.green[700], fontWeight: FontWeight.w500))),
+              Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              if (category.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 1, bottom: 3), child: Text(category, style: const TextStyle(fontSize: 10, color: Colors.grey, fontStyle: FontStyle.italic))),
+              if (description.isNotEmpty) Expanded(child: Text(description, maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11))),
+              if (bonuses.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Bonuses: $bonuses', style: TextStyle(fontSize: 10, color: Colors.green[700], fontWeight: FontWeight.w500))),
             ],
           ),
         ),
