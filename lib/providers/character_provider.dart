@@ -2,6 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/character.dart';
 import '../services/data_service.dart';
 
+final characterProvider = NotifierProvider<CharacterNotifier, Character>(
+  CharacterNotifier.new,
+);
+
 class CharacterNotifier extends Notifier<Character> {
   @override
   Character build() => const Character();
@@ -166,8 +170,4 @@ class CharacterNotifier extends Notifier<Character> {
     }
     return result;
   }
-
-  final characterProvider = NotifierProvider<CharacterNotifier, Character>(
-    CharacterNotifier.new,
-  );
 }
